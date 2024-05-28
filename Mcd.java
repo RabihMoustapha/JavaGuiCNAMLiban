@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.*;
 
 public class Mcd extends JFrame {
     // Processus
@@ -16,7 +17,7 @@ public class Mcd extends JFrame {
     private JTextField CP;// Cout processus
     private JTextField EP;// Etat processus
     private JTextField DP;// Duree processus
-    private JButton nextPage, lastPage;// Button to the next page
+    private JButton nextPage, lastPage, saveResourceHumaine, saveResourceMaterielle;// Button to the next page
 
     JTabbedPane demo;
 
@@ -42,16 +43,19 @@ public class Mcd extends JFrame {
     private JTextField EPR;// Etat projet
     private JTextField DPR;// Duree projet
 
-    //Resouce humaine
+    // Resouce humaine
     private JPanel PJLRH;
 
-    //Labels resource humaine
-    private JLabel PLRHF, PLRHS, PLRHTPH, PLRRH, PLRRM;
+    // Labels resource humaine
+    private JLabel PLRHF, PLRHS, PLRHTPH;
     private JTextField FRH, SRH, TPH;
 
-    // Tjrbe
-    private JRadioButton RH;
-    private JRadioButton RM;
+    // Resouce materielle
+    private JPanel PJLRM;
+
+    // Labels resource materielle
+    private JLabel PLRCPU;
+    private JTextField CPU;
 
     public Mcd() {
         super("Modele de donnee");
@@ -165,7 +169,6 @@ public class Mcd extends JFrame {
         PDPR.setLayout(new BorderLayout());
         PLPR = new JLabel();
         PLPR.setLayout(new BorderLayout());
-        
 
         // Font sets to the panels
         f5 = PLPR.getFont();
@@ -335,7 +338,6 @@ public class Mcd extends JFrame {
         // End Tache
 
         // Resource humaine
-
         PJLRH = new JPanel();// Another divsion
 
         // Headers
@@ -345,11 +347,6 @@ public class Mcd extends JFrame {
         PLRHTPH.setLayout(new BorderLayout());
         PLRHF = new JLabel("Fonction");
         PLRHF.setLayout(new BorderLayout());
-        PLRRH = new JLabel("Resource humaine");
-        PLRRH.setLayout(new BorderLayout());
-        PLRRM = new JLabel("Resource materielle");
-        PLRRM.setLayout(new BorderLayout());
-
 
         // Font sets to the panels
         f5 = PLRHS.getFont();
@@ -377,29 +374,51 @@ public class Mcd extends JFrame {
         f2 = FRH.getFont();
         FRH.setFont(f2.deriveFont(Font.BOLD, 22));
 
-        nextPage = new JButton("Next");
-        f6 = nextPage.getFont();
-        nextPage.setFont(f6.deriveFont(Font.BOLD, 22));
+        saveResourceHumaine = new JButton("Save");
+        f6 = saveResourceHumaine.getFont();
+        saveResourceHumaine.setFont(f6.deriveFont(Font.BOLD, 22));
 
         // Add componets to JLabel
         PLRHS.add(SRH);
         PLRHTPH.add(TPH);
         PLRHF.add(FRH);
 
-        // ADD componets to PJLP
+        // ADD componets to PJLRH
         PJLRH.setLayout(new GridLayout(20, 20));
+        PJLRH.setVisible(false);
         PJLRH.add(PLRHS);
         PJLRH.add(PLRHTPH);
         PJLRH.add(PLRHF);
-        PJLRH.add(PLRRH);
-        PJLRH.add(PLRRM);
-        PJLRH.add(nextPage);
+        PJLRH.add(saveResourceHumaine);
         // End resource humaine
 
-        RH = new JRadioButton("Resource humaine");
-        RM = new JRadioButton("Resource materielle");
-        PLRRM.add(RM);
-        PLRRH.add(RH);
+        // Resource materielle
+
+        PJLRM = new JPanel();// Another divsion
+
+        // Headers
+        CPU = new JTextField("Enter CPU");
+        PLRCPU = new JLabel("Cout par unite");
+        saveResourceMaterielle = new JButton("Save");
+        
+
+        // Font sets to the panels
+        f5 = PLRCPU.getFont();
+        PLRCPU.setFont(f5.deriveFont(Font.BOLD, 22));
+        getContentPane().add(PLRCPU, BorderLayout.CENTER);
+
+        f6 = saveResourceMaterielle.getFont();
+        saveResourceMaterielle.setFont(f6.deriveFont(Font.BOLD, 22));
+        getContentPane().add(saveResourceMaterielle, BorderLayout.CENTER);
+
+        // Add componets to JLabel
+        PLRCPU.add(CPU);
+
+        // ADD componets to PJLRM
+        PJLRM.setLayout(new GridLayout(20, 20));
+        PJLRM.add(PLRCPU);
+        PJLRM.add(saveResourceMaterielle);
+        // End resource materielle
 
         // Demo
         demo = new JTabbedPane();
@@ -407,10 +426,23 @@ public class Mcd extends JFrame {
         demo.add("Processus", PJLP);
         demo.add("Tache", PJLT);
         demo.add("Projet", PJLPR);
-        demo.add("Radio", RM);
-        demo.add("Resource humaine", RH);
-        demo.add("Resource humaine 1", PJLRH);
+        demo.add("Resource humaine", PJLRH);
+        demo.add("Resource materielle", PJLRM);
         add(demo, BorderLayout.CENTER);
+
+        // Action listener
+        saveResourceHumaine.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(null, "Hello");
+            }
+        });
+
+        
+        saveResourceMaterielle.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(null, "Hello");
+            }
+        });
     }
 
     public static void main(String[] args) {
