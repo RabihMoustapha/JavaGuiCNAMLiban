@@ -1,6 +1,6 @@
 import javax.swing.*;
 
-public class testMcd extends JFrame {
+public class testMcd {
 
     public static void main(String[] args) {
 
