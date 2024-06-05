@@ -1,4 +1,4 @@
-import java.util.Date;
+import java.util.*;
 
 public class processus {
     private String identite;
@@ -7,11 +7,11 @@ public class processus {
     private String etat;
     private Date duree;
 
-    public processus(String i, double c, String e, Date d, String rA){
+    public processus(String i, Double c1, String e, Date d1, String rA){
         i = identite;
-        cout = c;
+        c1 = cout;
         etat = e;
-        duree = d;
+        duree = d1;
         rA = resourceAffecte;
     }
 

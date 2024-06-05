@@ -1,158 +1,135 @@
-import javax.swing.*;
-import javax.swing.table.*;
 import java.awt.*;
 import java.awt.event.*;
+import javax.swing.*;
+import javax.swing.table.*;
 
 public class mcdProcessus extends JFrame {
-        // Processus
-        private JPanel PJLP;// Panel processus
+    private JPanel p1, p2; // Panels
+    private JLabel idL, raL, cL, dL, eL; // Labels
+    private JTextField id, c, d, e; // TextFields
+    private JRadioButton rH, rM;
+    private JButton reload, reset, add;
+    private JTable table;
+    private JScrollPane scrollPane;
+    private JComboBox<String> rA;
 
-        // Labels processus
-        private JLabel PLP, PIP, PRAP, PCP, PEP, PDP;
-
-      // TextField fonts
-      Font f, f1, f2, f3, f4, f5, f6, f7, f8, f9, f10, f11, f12;
-
-      private JTextField IP; // Identite processus
-      private JTextField RAP;// Resource affectee processus
-      private JTextField CP;// Cout processus
-      private JTextField EP;// Etat processus
-      private JTextField DP;// Duree processus
-      private JButton ADD, CLEAR;// Button to the next page
-
-      private JTable table;
-      private DefaultTableModel model;
-      private JScrollPane scroll;
-      private tableFrame tF;
-
-      private String[] colsName = {"Identite", "Resource affectee", "Cout", "Etat", "Duree"};
-      int row, col;
-      private Object[][] data = new Object[row][col];
-
-      public mcdProcessus(){
+    public mcdProcessus() {
         super("Processus");
         setLayout(new BorderLayout());
-        row = 0; col = 0;
+        p1 = new JPanel(new GridLayout(5, 2));
+        p2 = new JPanel();
 
-        // Processus
-        PJLP = new JPanel();// Another divsion
+        // Labels
+        idL = new JLabel("Identité");
+        raL = new JLabel("Resource Affectée");
+        dL = new JLabel("Durée");
+        cL = new JLabel("Cout");
+        eL = new JLabel("État");
 
-        // Headers
-        PLP = new JLabel();
-        PLP.setLayout(new BorderLayout());
-        PIP = new JLabel("IP");
-        PIP.setLayout(new BorderLayout());
-        PRAP = new JLabel("RAP");
-        PRAP.setLayout(new BorderLayout());
-        PCP = new JLabel("CP");
-        PCP.setLayout(new BorderLayout());
-        PEP = new JLabel("EP");
-        PEP.setLayout(new BorderLayout());
-        PDP = new JLabel("DP");
-        PDP.setLayout(new BorderLayout());
+        // TextFields
+        id = new JTextField();
+        DefaultComboBoxModel<String> model1 = new DefaultComboBoxModel<String>();
+        rA = new JComboBox<String>(model1);
+        rA.addItem("Resource Humaine");
+        rA.addItem("Resource materielle");
+        JScrollPane rAs = new JScrollPane(rA);
+        c = new JTextField();
+        d = new JTextField();
+        e = new JTextField();
 
-        // Font sets to the panels
-        f5 = PLP.getFont();
-        PLP.setFont(f5.deriveFont(Font.BOLD, 22));
-        getContentPane().add(PLP, BorderLayout.CENTER);
+        // RadioButtons
+        rM = new JRadioButton("Resource Materielle");
+        rH = new JRadioButton("Resource Humaine");
 
-        f8 = PLP.getFont();
-        PIP.setFont(f8.deriveFont(Font.BOLD, 22));
-        getContentPane().add(PIP, BorderLayout.CENTER);
+        // Buttons
+        reload = new JButton("Reload");
+        reset = new JButton("Reset");
+        add = new JButton("Add");
 
-        f9 = PRAP.getFont();
-        PRAP.setFont(f9.deriveFont(Font.BOLD, 22));
-        getContentPane().add(PRAP, BorderLayout.CENTER);
-
-        f10 = PCP.getFont();
-        PCP.setFont(f10.deriveFont(Font.BOLD, 22));
-        getContentPane().add(PCP, BorderLayout.CENTER);
-
-        f11 = PDP.getFont();
-        PDP.setFont(f11.deriveFont(Font.BOLD, 22));
-        getContentPane().add(PDP, BorderLayout.CENTER);
-
-        f12 = PEP.getFont();
-        PEP.setFont(f12.deriveFont(Font.BOLD, 22));
-        getContentPane().add(PEP, BorderLayout.CENTER);
-
-        // Inputs with place holder
-        IP = new JTextField("Enter your identite");
-        f = IP.getFont();
-        IP.setFont(f.deriveFont(Font.BOLD, 22));
-
-        RAP = new JTextField("Enter your resource affectee");
-        f1 = RAP.getFont();
-        RAP.setFont(f1.deriveFont(Font.BOLD, 22));
-
-        CP = new JTextField("Enter your cout");
-        f2 = CP.getFont();
-        CP.setFont(f2.deriveFont(Font.BOLD, 22));
-
-        EP = new JTextField("Enter your etat");
-        f3 = EP.getFont();
-        EP.setFont(f3.deriveFont(Font.BOLD, 22));
-
-        DP = new JTextField("Enter your duree");
-        f4 = DP.getFont();
-        DP.setFont(f4.deriveFont(Font.BOLD, 22));
-
-        ADD = new JButton("Next");
-        f6 = ADD.getFont();
-        ADD.setFont(f6.deriveFont(Font.BOLD, 22));
-
-        CLEAR = new JButton("Last");
-        f7 = CLEAR.getFont();
-        CLEAR.setFont(f7.deriveFont(Font.BOLD, 22));
-
-        // Add componets to JLabel
-        PIP.add(IP);
-        PRAP.add(RAP);
-        PCP.add(CP);
-        PDP.add(DP);
-        PEP.add(EP);
-
-        // ADD componets to PJLP
-        PJLP.setLayout(new GridLayout(20, 20));
-        PJLP.add(PIP);
-        PJLP.add(PCP);
-        PJLP.add(PEP);
-        PJLP.add(PDP);
-        PJLP.add(PRAP);
-        PJLP.add(ADD);
-        // End processus
-        
+        String[] columnNames = { "Identité", "Resource Affectée", "Cout", "Durée", "État" };
+        DefaultTableModel model = new DefaultTableModel(columnNames, 0);
         table = new JTable(model);
-        model = new DefaultTableModel(data, colsName);
-        scroll = new JScrollPane(table);
-        tF = new tableFrame(data, colsName);
+        scrollPane = new JScrollPane(table);
 
-        ADD.addActionListener(new ActionListener(){
-          public void actionPerformed(ActionEvent e){
-            String IPvalue = IP.getText();
-            data[row][col] = IPvalue;
-            ++col;
+        p1.add(idL);
+        p1.add(id);
 
-            String RAPvalue = RAP.getText();
-            data[row][col] = RAPvalue;
-            ++col;
+        p1.add(raL);
+        p1.add(rAs);
 
-            String CPvalue = CP.getText();
-            data[row][col] = CPvalue;
-            ++col;
+        p1.add(cL);
+        p1.add(c);
 
-            String EPvalue = EP.getText();
-            data[row][col] = EPvalue;
-            ++col;
-            
-            String DPvalue = DP.getText();
-            data[row][col] = DPvalue;
-            ++col;
-            row++;  
-            JOptionPane.showMessageDialog(null, "Value entered");
-          }
+        p1.add(eL);
+        p1.add(e);
+
+        p1.add(dL);
+        p1.add(d);
+
+        p2.add(scrollPane);
+        p2.add(add);
+        p2.add(reload);
+        p2.add(reset);
+
+        add(p1, BorderLayout.NORTH);
+        add(p2, BorderLayout.CENTER);
+
+        // reset
+        reset.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e1) {
+                // Clear the text fields
+                c.setText("");
+                d.setText("");
+                id.setText("");
+                e.setText("");
+            }
         });
-        
-        add(PJLP);
-      }
+
+        // reload
+        reload.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Clear all rows from the table
+                model.setRowCount(0);
+            }
+        });
+
+        // add
+        add.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e2) {
+                String id1 = id.getText();
+                String c1 = c.getText();
+                String e1 = e.getText();
+                String d1 = d.getText();
+                if (id1.isEmpty() || c1.isEmpty() || e1.isEmpty() || d1.isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "ID, etat, rA, duree and cout cannot be empty.", "Error",
+                            JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                try {
+                    if (!rM.isSelected() && !rH.isSelected()) {
+                        JOptionPane.showMessageDialog(null, "Please select a resource.", "Error",
+                                JOptionPane.ERROR_MESSAGE);
+                    } else {
+                        // "Identité", "Resource Affectée", "Cout","Durée", "État"
+                        model.addRow(new Object[] { id1, rA.getSelectedItem(), c1, d1, c1 });
+                    }
+
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(null, "Score must be an integer.", "Error",
+                            JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+    }
+
+    public static void main(String[] args) {
+        mcdProcessus m = new mcdProcessus();
+        m.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        m.pack();
+        m.setVisible(true);
+    }
 }
