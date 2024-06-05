@@ -4,20 +4,21 @@ import javax.swing.*;
 import javax.swing.table.*;
 
 public class mcdProcessus extends JFrame {
-    private JPanel p1, p2; // Panels
+    private JPanel p1, p2, p3; // Panels
     private JLabel idL, raL, cL, dL, eL; // Labels
     private JTextField id, c, d, e; // TextFields
-    private JRadioButton rH, rM;
     private JButton reload, reset, add;
     private JTable table;
     private JScrollPane scrollPane;
     private JComboBox<String> rA;
+    private Object[] data;
 
     public mcdProcessus() {
         super("Processus");
         setLayout(new BorderLayout());
         p1 = new JPanel(new GridLayout(5, 2));
         p2 = new JPanel();
+        p3 = new JPanel();
 
         // Labels
         idL = new JLabel("Identité");
@@ -36,10 +37,6 @@ public class mcdProcessus extends JFrame {
         c = new JTextField();
         d = new JTextField();
         e = new JTextField();
-
-        // RadioButtons
-        rM = new JRadioButton("Resource Materielle");
-        rH = new JRadioButton("Resource Humaine");
 
         // Buttons
         reload = new JButton("Reload");
@@ -66,13 +63,15 @@ public class mcdProcessus extends JFrame {
         p1.add(dL);
         p1.add(d);
 
-        p2.add(scrollPane);
         p2.add(add);
         p2.add(reload);
         p2.add(reset);
 
+        p3.add(scrollPane);
+
         add(p1, BorderLayout.NORTH);
         add(p2, BorderLayout.CENTER);
+        add(p3, BorderLayout.SOUTH);
 
         // reset
         reset.addActionListener(new ActionListener() {
@@ -110,13 +109,9 @@ public class mcdProcessus extends JFrame {
                 }
 
                 try {
-                    if (!rM.isSelected() && !rH.isSelected()) {
-                        JOptionPane.showMessageDialog(null, "Please select a resource.", "Error",
-                                JOptionPane.ERROR_MESSAGE);
-                    } else {
-                        // "Identité", "Resource Affectée", "Cout","Durée", "État"
-                        model.addRow(new Object[] { id1, rA.getSelectedItem(), c1, d1, c1 });
-                    }
+                    // "Identité", "Resource Affectée", "Cout","Durée", "État"
+                    data = new Object[] { id1, rA.getSelectedItem(), c1, d1, e1 };
+                    model.addRow(data);
 
                 } catch (NumberFormatException ex) {
                     JOptionPane.showMessageDialog(null, "Score must be an integer.", "Error",
