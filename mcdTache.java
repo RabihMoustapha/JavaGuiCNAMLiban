@@ -1,122 +1,193 @@
-import javax.swing.*;
 import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import javax.swing.event.*;
+import javax.swing.table.*;
 
-public class mcdTache extends JFrame {
-    // TextField fonts
-    Font f, f1, f2, f3, f4, f5, f6, f7, f8, f9, f10, f11, f12;
+public class mcdTache extends JFrame{
+    private JPanel p9, p10, p11; // Panels
+    private JLabel idL, raL, cL, dL, eL, pidL, prL, peL, pdL, pcL; // Labels
+    private JTextField id, c, d, e, pid, pe, pc, pd; // TextFields
+    private JButton reload, reset, add;
+    private JTable table;
+    private JScrollPane scrollPane, pane;
+    private JComboBox<String> rA, prA;
+    private Object[] data;
+    private JList<String> list;
+    //private String[] data1;
+    private DefaultListModel<String> listModel;
 
-    private JButton nextPage, lastPage;// Button to the next page
+    public mcdTache() {
+        p9 = new JPanel(new GridLayout(5, 2));
+        p10 = new JPanel();
+        p11 = new JPanel();
 
-    // Tache
-    private JPanel PLT;
-    private JLabel PJLT, PIT, PRAT, PDT, PET, PPT, PCT;
-    private JTextField PT;// Processus tache
-    private JTextField IT;// Identite tache
-    private JTextField RAT;// Resource affectee tache
-    private JTextField CT;// Cout tache
-    private JTextField ET;// Etat tache
-    private JTextField DT;// Duree tache
+        // Labels
+        idL = new JLabel("Identité");
+        raL = new JLabel("Resource Affectée");
+        dL = new JLabel("Durée");
+        cL = new JLabel("Cout");
+        eL = new JLabel("État");
 
-    public mcdTache(){
-        super("Tache");
-        setLayout(new BorderLayout());
+        // TextFields
+        id = new JTextField();
+        DefaultComboBoxModel<String> model = new DefaultComboBoxModel<String>();
+        rA = new JComboBox<String>(model);
+        rA.addItem("Resource Humaine");
+        rA.addItem("Resource materielle");
+        JScrollPane rAs = new JScrollPane(rA);
+        c = new JTextField();
+        d = new JTextField();
+        e = new JTextField();
 
-        // Tache
+        //Processus
+        pidL = new JLabel("Identité Processus");
+        prL = new JLabel("Resource Affectée Processus");
+        pdL = new JLabel("Durée Processus");
+        pcL = new JLabel("Cout Procesuss");
+        peL = new JLabel("État Processus");
 
-        PLT = new JPanel();// Another divsion
+        pid = new JTextField();
+        DefaultComboBoxModel<String> model1 = new DefaultComboBoxModel<String>();
+        prA = new JComboBox<String>(model1);
+        prA.addItem("Resource Humaine");
+        prA.addItem("Resource materielle");
+        JScrollPane prAs = new JScrollPane(prA);
+        pc = new JTextField();
+        pd = new JTextField();
+        pe = new JTextField();
 
-        // Headers
-        PJLT = new JLabel();
-        //PLP.setLayout(new BorderLayout());
-        PIT = new JLabel("IT");
-        PIT.setLayout(new BorderLayout());
-        PRAT = new JLabel("RAT");
-        PRAT.setLayout(new BorderLayout());
-        PCT = new JLabel("CT");
-        PCT.setLayout(new BorderLayout());
-        PET = new JLabel("ET");
-        PET.setLayout(new BorderLayout());
-        PDT = new JLabel("DT");
-        PDT.setLayout(new BorderLayout());
-        PPT = new JLabel("PT");
-        PPT.setLayout(new BorderLayout());
+        // Buttons
+        reload = new JButton("Reload");
+        reset = new JButton("Reset");
+        add = new JButton("Add");
 
-        // Font sets to the panels
-        f5 = PLT.getFont();
-        PLT.setFont(f5.deriveFont(Font.BOLD, 22));
-        getContentPane().add(PLT, BorderLayout.CENTER);
+        //JTable componets
+        String[] columnNames = { "Identité", "Resource Affectée", "Cout", "Durée", "État" };
+        DefaultTableModel model2 = new DefaultTableModel(columnNames, 0);
+        table = new JTable(model2);
+        scrollPane = new JScrollPane(table);
 
-        f8 = PLT.getFont();
-        PIT.setFont(f8.deriveFont(Font.BOLD, 22));
-        getContentPane().add(PIT, BorderLayout.CENTER);
+        //List
+        listModel = new DefaultListModel<String>();
+        list = new JList<String>(listModel);
+        list.setVisibleRowCount(5);
+        list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        pane = new JScrollPane(list);
 
-        f9 = PRAT.getFont();
-        PRAT.setFont(f9.deriveFont(Font.BOLD, 22));
-        getContentPane().add(PRAT, BorderLayout.CENTER);
+        p9.add(idL);
+        p9.add(id);
 
-        f10 = PCT.getFont();
-        PCT.setFont(f10.deriveFont(Font.BOLD, 22));
-        getContentPane().add(PCT, BorderLayout.CENTER);
+        p9.add(raL);
+        p9.add(rAs);
 
-        f11 = PDT.getFont();
-        PDT.setFont(f11.deriveFont(Font.BOLD, 22));
-        getContentPane().add(PDT, BorderLayout.CENTER);
+        p9.add(cL);
+        p9.add(c);
 
-        f12 = PET.getFont();
-        PET.setFont(f12.deriveFont(Font.BOLD, 22));
-        getContentPane().add(PET, BorderLayout.CENTER);
+        p9.add(eL);
+        p9.add(e);
 
-        // Inputs with place holder
-        IT = new JTextField("Enter your identite");
-        f = IT.getFont();
-        IT.setFont(f.deriveFont(Font.BOLD, 22));
+        p9.add(dL);
+        p9.add(d);
 
-        RAT = new JTextField("Enter your resource affectee");
-        f1 = RAT.getFont();
-        RAT.setFont(f1.deriveFont(Font.BOLD, 22));
+        p9.add(pidL);
+        p9.add(pid);
 
-        CT = new JTextField("Enter your cout");
-        f2 = CT.getFont();
-        CT.setFont(f2.deriveFont(Font.BOLD, 22));
+        p9.add(prL);
+        p9.add(prAs);
 
-        ET = new JTextField("Enter your etat");
-        f3 = ET.getFont();
-        ET.setFont(f3.deriveFont(Font.BOLD, 22));
+        p9.add(pcL);
+        p9.add(pc);
 
-        DT = new JTextField("Enter your duree");
-        f4 = DT.getFont();
-        DT.setFont(f4.deriveFont(Font.BOLD, 22));
+        p9.add(peL);
+        p9.add(pe);
 
-        PT = new JTextField("Enter your Processus");
-        f4 = PT.getFont();
-        PT.setFont(f4.deriveFont(Font.BOLD, 22));
+        p9.add(pdL);
+        p9.add(pd);
 
-        nextPage = new JButton("Next");
-        f6 = nextPage.getFont();
-        nextPage.setFont(f6.deriveFont(Font.BOLD, 22));
+        p10.add(add);
+        p10.add(reload);
+        p10.add(reset);
 
-        lastPage = new JButton("Last");
-        f7 = lastPage.getFont();
-        lastPage.setFont(f7.deriveFont(Font.BOLD, 22));
+        p11.add(pane);
+        p11.add(scrollPane);
 
-        // Add componets to JLabel
-        PIT.add(IT);
-        PRAT.add(RAT);
-        PCT.add(CT);
-        PDT.add(DT);
-        PET.add(ET);
 
-        // ADD componets to PJLT
-        PJLT.setLayout(new GridLayout(20, 20));
-        PJLT.add(PIT);
-        PJLT.add(PCT);
-        PJLT.add(PET);
-        PJLT.add(PDT);
-        PJLT.add(PRAT);
-        PJLT.add(PT);
-        PJLT.add(nextPage);
-        // End Tache
+        // reset
+        reset.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e1) {
+                // Clear the text fields
+                c.setText("");
+                d.setText("");
+                id.setText("");
+                e.setText("");
+                pc.setText("");
+                pd.setText("");
+                pid.setText("");
+                pe.setText("");
+            }
+        });
 
-        add(PJLT);
+        // reload
+        reload.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Clear all rows from the table
+                model2.setRowCount(0);
+            }
+        });
+
+        // add
+        add.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e2) {
+                String id1 = id.getText();
+                String c1 = c.getText();
+                String e1 = e.getText();
+                String d1 = d.getText();
+                if (id1.isEmpty() || c1.isEmpty() || e1.isEmpty() || d1.isEmpty()) {;
+                    JOptionPane.showMessageDialog(null, "ID, etat, rA, duree and cout cannot be empty.", "Error",
+                            JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                try {
+                    // "Identité", "Resource Affectée", "Cout","Durée", "État"
+                    data = new Object[] { id1, rA.getSelectedItem(), c1, d1, e1 };
+                    model2.addRow(data);
+
+                    //List add element
+                    String ad = id1 + " " + c1 +" "+ e1 + " "+ d1;
+                    //data1 = new String[]{id1 + " " + c1 +" "+ e1 + " "+ d1}; 
+                    listModel.addElement(ad);
+
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(null, "Score must be an integer.", "Error",
+                            JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
+        list.addListSelectionListener(new ListSelectionListener() {
+            public void valueChanged(ListSelectionEvent e){
+                int index = list.getSelectedIndex();
+
+                // "Identité", "Resource Affectée", "Cout","Durée", "État"
+                String value = listModel.getElementAt(index);
+                model2.addRow(new Object[][]{{value}});
+            }
+        });
+
+        add(p9, BorderLayout.NORTH);
+        add(p10, BorderLayout.CENTER);
+        add(p11, BorderLayout.SOUTH);
+    }
+
+    public static void main(String[] args) {
+        mcdTache t = new mcdTache();
+        t.setVisible(true);
+        t.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        t.setSize(300, 300);
     }
 }
