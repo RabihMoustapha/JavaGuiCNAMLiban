@@ -3,54 +3,41 @@ import javax.swing.event.*;
 import javax.swing.table.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.*;
+import java.util.*;
 
 public class testMcd extends JFrame {
 
     private JTabbedPane demo;
 
-    // class mcdProcessus {
+    // Filter
+    private JLabel filterLabel;
+    private TableRowSorter<DefaultTableModel> sorter;
+    private JTextField filterText;
+    private JButton filterButton;
+
+    // Processus
     private JPanel p1, p2, p3, p4; // Panels
     private JLabel idL, raL, cL, dL, eL; // Labels
     private JTextField id, c, d, e; // TextFields
     private JButton reload, reset, add;
     private JTable table;
-    private JScrollPane scrollPane, pane;
+    private JScrollPane scrollPane;
     private JComboBox<String> rA;
-    private Object[] data;
-    private JList<String> list;
-    // private String[] data1;
-    private DefaultListModel<String> listModel;
 
-    //Projet
+    // Projet
     private JPanel p5, p6, p7, p8; // Panels
     private JLabel idL1, raL1, cL1, dL1, eL1, pidL, prL, pcL, peL, pdL; // Labels
     private JTextField id1, c1, d1, e1, pid, pc, pe, pd; // TextFields
-    private JButton reload1, reset1, add1;
+    private JButton reload1, reset1, add1, read;
     private JTable table1;
-    private JScrollPane scrollPane1, pane1;
+    private JScrollPane scrollPane1;
     private JComboBox<String> rA1, prA;
-    private Object[] data1;
-    private JList<String> list1;
-    //private String[] data1;
-    private DefaultListModel<String> listModel1;
-
-    //Tache 
-    private JPanel p9, p10, p11, p12; // Panels
-    private JLabel idL2, raL2, cL2, dL2, eL2, pidL2, prL2, peL2, pdL2, pcL2; // Labels
-    private JTextField id2, c2, d2, e2, pid2, pe2, pc2, pd2; // TextFields
-    private JButton reload2, reset2, add2;
-    private JTable table2;
-    private JScrollPane scrollPane2, pane2;
-    private JComboBox<String> rA2, prA2;
-    private Object[] data2;
-    private JList<String> list2;
-    //private String[] data1;
-    private DefaultListModel<String> listModel2;
 
     public testMcd() {
-        //Mcd Processus
+        // Mcd Processus
         demo = new JTabbedPane();
-        p1 = new JPanel(new GridLayout(5, 2));
+        p1 = new JPanel(new GridLayout(6, 2));
         p2 = new JPanel();
         p3 = new JPanel();
         p4 = new JPanel(new BorderLayout());
@@ -61,6 +48,7 @@ public class testMcd extends JFrame {
         dL = new JLabel("Durée");
         cL = new JLabel("Cout");
         eL = new JLabel("État");
+        filterLabel = new JLabel("Filter");
 
         // Processus TextFields
         id = new JTextField();
@@ -77,6 +65,7 @@ public class testMcd extends JFrame {
         reload = new JButton("Reload");
         reset = new JButton("Reset");
         add = new JButton("Add");
+        read = new JButton("ReadData");
 
         // Processus JTable componets
         String[] columnNames = { "Identité", "Resource Affectée", "Cout", "Durée", "État" };
@@ -84,12 +73,12 @@ public class testMcd extends JFrame {
         table = new JTable(model2);
         scrollPane = new JScrollPane(table);
 
-        // Processus List
-        listModel = new DefaultListModel<String>();
-        list = new JList<String>(listModel);
-        list.setVisibleRowCount(5);
-        list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        pane = new JScrollPane(list);
+        // Filter componets
+        sorter = new TableRowSorter<>(model2);
+        table.setRowSorter(sorter);
+        filterText = new JTextField();
+        filterText.setToolTipText("Filter");
+        filterButton = new JButton("Filter");
 
         p1.add(idL);
         p1.add(id);
@@ -105,12 +94,15 @@ public class testMcd extends JFrame {
 
         p1.add(dL);
         p1.add(d);
+        p1.add(filterLabel);
+        p1.add(filterText);
 
         p2.add(add);
         p2.add(reload);
         p2.add(reset);
+        p2.add(filterButton);
+        p2.add(read);
 
-        p3.add(pane);
         p3.add(scrollPane);
         p4.add(p1, BorderLayout.NORTH);
         p4.add(p2, BorderLayout.CENTER);
@@ -146,6 +138,7 @@ public class testMcd extends JFrame {
                 String c1 = c.getText();
                 String e1 = e.getText();
                 String d1 = d.getText();
+                Vector<Vector<String>> data = new Vector<>();
                 if (id1.isEmpty() || c1.isEmpty() || e1.isEmpty() || d1.isEmpty()) {
                     ;
                     JOptionPane.showMessageDialog(null, "ID, etat, rA, duree and cout cannot be empty.", "Error",
@@ -153,16 +146,15 @@ public class testMcd extends JFrame {
                     return;
                 }
 
-                try {
-                    // "Identité", "Resource Affectée", "Cout","Durée", "État"
-                    data = new Object[] { id1, rA.getSelectedItem(), c1, d1, e1 };
-                    model2.addRow(data);
-
-                    // List add element
-                    String ad = id1 + " " + c1 + " " + e1 + " " + d1;
-                    // data1 = new String[]{id1 + " " + c1 +" "+ e1 + " "+ d1};
-                    listModel.addElement(ad);
-
+                try (BufferedReader br = new BufferedReader(new FileReader("data.txt"))){
+                    Vector<String> row = new Vector<>();
+                    String line;
+                    while ((line = br.readLine()) != null) {
+                    String[] values = line.split(",");
+                    for(String value : values){
+                    model2.addRow(new Object[]{id1, rA.getSelectedItem(), c1, e1, d1});
+                    } data.add(row);
+                }
                 } catch (NumberFormatException ex) {
                     JOptionPane.showMessageDialog(null, "Score must be an integer.", "Error",
                             JOptionPane.ERROR_MESSAGE);
@@ -170,13 +162,40 @@ public class testMcd extends JFrame {
             }
         });
 
-        list.addListSelectionListener(new ListSelectionListener() {
-            public void valueChanged(ListSelectionEvent e) {
-                int index = list.getSelectedIndex();
+        // Read data
+        read.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                // Read data from text file
+                Vector<Vector<String>> data = new Vector<>();
+                String line;
+                try (BufferedReader br = new BufferedReader(new FileReader("data.txt"))) {
+                    while ((line = br.readLine()) != null) {
+                        Vector<String> row = new Vector<>();
+                        String[] values = line.split(",");
+                        for (String value : values) {
+                            row.add(value);
+                        }
+                        data.add(row);
+                    }
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
 
-                // "Identité", "Resource Affectée", "Cout","Durée", "État"
-                String value = listModel.getElementAt(index);
-                model2.addRow(new Object[][] {{value}});
+                // Create TableModel and JTable
+                Vector<String> columnNames = new Vector<>();
+
+                // Assuming the first line in the file contains column names
+                try (BufferedReader br = new BufferedReader(new FileReader("data.txt"))) {
+                    if ((line = br.readLine()) != null) {
+                        String[] columnValues = line.split(",");
+                        for (String columnValue : columnValues) {
+                            columnNames.add(columnValue);
+                        }
+                    }
+                    model2.addRow(columnNames);
+                } catch (IOException e2) {
+                    e2.printStackTrace();
+                }
             }
         });
 
@@ -233,13 +252,6 @@ public class testMcd extends JFrame {
         table1 = new JTable(model4);
         scrollPane1 = new JScrollPane(table1);
 
-        // List
-        listModel1 = new DefaultListModel<String>();
-        list1 = new JList<String>(listModel1);
-        list1.setVisibleRowCount(5);
-        list1.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        pane1 = new JScrollPane(list1);
-
         // Add componets to the panels
         p5.add(idL1);
         p5.add(id1);
@@ -277,7 +289,6 @@ public class testMcd extends JFrame {
         p6.add(reset1);
 
         // p7
-        p7.add(pane1);
         p7.add(scrollPane1);
 
         p8.add(p5, BorderLayout.NORTH);
@@ -308,14 +319,12 @@ public class testMcd extends JFrame {
 
         // add
         add1.addActionListener(new ActionListener() {
-            @Override
             public void actionPerformed(ActionEvent e2) {
                 String id2 = id1.getText();
                 String c2 = c1.getText();
                 String e3 = e1.getText();
                 String d2 = d1.getText();
                 if (id2.isEmpty() || c2.isEmpty() || e3.isEmpty() || d2.isEmpty()) {
-                    ;
                     JOptionPane.showMessageDialog(null, "ID, etat, rA, duree and cout cannot be empty.", "Error",
                             JOptionPane.ERROR_MESSAGE);
                     return;
@@ -323,13 +332,7 @@ public class testMcd extends JFrame {
 
                 try {
                     // "Identité", "Resource Affectée", "Cout","Durée", "État"
-                    data1 = new Object[] { id1, rA1.getSelectedItem(), c1, d1, e1 };
-                    model2.addRow(data1);
-
-                    // List add element
-                    String ad = id1 + " " + c1 + " " + e1 + " " + d1;
-                    // data1 = new String[]{id1 + " " + c1 +" "+ e1 + " "+ d1};
-                    listModel1.addElement(ad);
+                    model2.addRow(new Object[] { id1, rA1.getSelectedItem(), c1, d1, e1 });
 
                 } catch (NumberFormatException ex) {
                     JOptionPane.showMessageDialog(null, "Score must be an integer.", "Error",
@@ -338,185 +341,17 @@ public class testMcd extends JFrame {
             }
         });
 
-        list1.addListSelectionListener(new ListSelectionListener() {
-            public void valueChanged(ListSelectionEvent e) {
-                int index = list1.getSelectedIndex();
-
-                // "Identité", "Resource Affectée", "Cout","Durée", "État"
-                String value = listModel1.getElementAt(index);
-                model2.addRow(new Object[][]{{value}});
+        filterButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String text = filterText.getText();
+                if (text.length() == 0) {
+                    sorter.setRowFilter(null);
+                } else {
+                    sorter.setRowFilter(RowFilter.regexFilter("(?i)" + text));
+                }
             }
         });
-
-        //Mcd tache
-            p9 = new JPanel(new GridLayout(5, 2));
-            p10 = new JPanel();
-            p11 = new JPanel();
-            p12 = new JPanel(new BorderLayout());
-    
-            // Labels
-            idL2 = new JLabel("Identité");
-            raL2 = new JLabel("Resource Affectée");
-            dL2 = new JLabel("Durée");
-            cL2 = new JLabel("Cout");
-            eL2 = new JLabel("État");
-    
-            // TextFields
-            id2 = new JTextField();
-            DefaultComboBoxModel<String> model5 = new DefaultComboBoxModel<String>();
-            rA2 = new JComboBox<String>(model5);
-            rA2.addItem("Resource Humaine");
-            rA2.addItem("Resource materielle");
-            JScrollPane rAs2 = new JScrollPane(rA2);
-            c2 = new JTextField();
-            d2 = new JTextField();
-            e2 = new JTextField();
-    
-            //Processus
-            pidL2 = new JLabel("Identité Processus");
-            prL2 = new JLabel("Resource Affectée Processus");
-            pdL2 = new JLabel("Durée Processus");
-            pcL2 = new JLabel("Cout Procesuss");
-            peL2 = new JLabel("État Processus");
-    
-            pid2 = new JTextField();
-            DefaultComboBoxModel<String> model6 = new DefaultComboBoxModel<String>();
-            prA2 = new JComboBox<String>(model6);
-            prA2.addItem("Resource Humaine");
-            prA2.addItem("Resource materielle");
-            JScrollPane prAs2 = new JScrollPane(prA2);
-            pc2 = new JTextField();
-            pd2 = new JTextField();
-            pe2 = new JTextField();
-    
-            // Buttons
-            reload2 = new JButton("Reload");
-            reset2 = new JButton("Reset");
-            add2 = new JButton("Add");
-    
-            //JTable componets
-            String[] columnNames2 = { "Identité", "Resource Affectée", "Cout", "Durée", "État" };
-            DefaultTableModel model7 = new DefaultTableModel(columnNames2, 0);
-            table2 = new JTable(model7);
-            scrollPane2 = new JScrollPane(table2);
-    
-            //List
-            listModel2 = new DefaultListModel<String>();
-            list2 = new JList<String>(listModel);
-            list2.setVisibleRowCount(5);
-            list2.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-            pane2 = new JScrollPane(list2);
-    
-            p9.add(idL2);
-            p9.add(id2);
-    
-            p9.add(raL2);
-            p9.add(rAs2);
-    
-            p9.add(cL2);
-            p9.add(c2);
-    
-            p9.add(eL2);
-            p9.add(e2);
-    
-            p9.add(dL2);
-            p9.add(d2);
-    
-            p9.add(pidL2);
-            p9.add(pid2);
-    
-            p9.add(prL2);
-            p9.add(prAs2);
-    
-            p9.add(pcL2);
-            p9.add(pc2);
-    
-            p9.add(peL2);
-            p9.add(pe2);
-    
-            p9.add(pdL2);
-            p9.add(pd2);
-    
-            p10.add(add2);
-            p10.add(reload2);
-            p10.add(reset2);
-    
-            p11.add(pane2);
-            p11.add(scrollPane2);
-    
-    
-            // reset
-            reset2.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e1) {
-                    // Clear the text fields
-                    c2.setText("");
-                    d2.setText("");
-                    id2.setText("");
-                    e2.setText("");
-                    pc2.setText("");
-                    pd2.setText("");
-                    pid2.setText("");
-                    pe2.setText("");
-                }
-            });
-    
-            // reload
-            reload2.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    // Clear all rows from the table
-                    model7.setRowCount(0);
-                }
-            });
-    
-            // add
-            add2.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e1) {
-                    String id2 = id.getText();
-                    String c2 = c.getText();
-                    String e2 = e.getText();
-                    String d2 = d.getText();
-                    if (id2.isEmpty() || c2.isEmpty() || e2.isEmpty() || d2.isEmpty()) {;
-                        JOptionPane.showMessageDialog(null, "ID, etat, rA, duree and cout cannot be empty.", "Error",
-                                JOptionPane.ERROR_MESSAGE);
-                        return;
-                    }
-    
-                    try {
-                        // "Identité", "Resource Affectée", "Cout","Durée", "État"
-                        data2 = new Object[] { id1, rA.getSelectedItem(), c1, d1, e1 };
-                        model7.addRow(data2);
-    
-                        //List add element
-                        String ad2 = id2 + " " + c2 +" "+ e2 + " "+ d2;
-                        //data1 = new String[]{id1 + " " + c1 +" "+ e1 + " "+ d1}; 
-                        listModel.addElement(ad2);
-    
-                    } catch (NumberFormatException ex) {
-                        JOptionPane.showMessageDialog(null, "Score must be an integer.", "Error",
-                                JOptionPane.ERROR_MESSAGE);
-                    }
-                }
-            });
-    
-            list2.addListSelectionListener(new ListSelectionListener() {
-                public void valueChanged(ListSelectionEvent e){
-                    int index = list.getSelectedIndex();
-    
-                    // "Identité", "Resource Affectée", "Cout","Durée", "État"
-                    String value = listModel.getElementAt(index);
-                    model2.addRow(new Object[][]{{value}});
-                }
-            });
-
-            p12.add(p9, BorderLayout.NORTH);
-            p12.add(p10, BorderLayout.CENTER);
-            p12.add(p11, BorderLayout.SOUTH);
-            demo.add("Tache", p12);
     }
-
 
     public static void main(String[] args) {
 
