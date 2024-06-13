@@ -132,32 +132,22 @@ public class testMcd extends JFrame {
 
         // Add
         add.addActionListener(new ActionListener() {
-            @Override
             public void actionPerformed(ActionEvent e2) {
                 String id1 = id.getText();
                 String c1 = c.getText();
                 String e1 = e.getText();
                 String d1 = d.getText();
-                Vector<Vector<String>> data = new Vector<>();
-                if (id1.isEmpty() || c1.isEmpty() || e1.isEmpty() || d1.isEmpty()) {
-                    ;
-                    JOptionPane.showMessageDialog(null, "ID, etat, rA, duree and cout cannot be empty.", "Error",
-                            JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
 
-                try (BufferedReader br = new BufferedReader(new FileReader("data.txt"))){
-                    Vector<String> row = new Vector<>();
-                    String line;
-                    while ((line = br.readLine()) != null) {
-                    String[] values = line.split(",");
-                    for(String value : values){
-                    model2.addRow(new Object[]{id1, rA.getSelectedItem(), c1, e1, d1});
-                    } data.add(row);
-                }
-                } catch (NumberFormatException ex) {
-                    JOptionPane.showMessageDialog(null, "Score must be an integer.", "Error",
-                            JOptionPane.ERROR_MESSAGE);
+                if(id1!=null && c1!=null && e1!=null && d1!=null){
+                    try{
+                        FileWriter w = new FileWriter("data.txt");
+                        w.write(id1 + ", " + c1 + ", " + e1 + ", " + d1);
+                        w.write("\n");
+                        w.close();
+                        JOptionPane.showMessageDialog(null, "DataAdded");
+                    }catch(IOException ioe){
+                        JOptionPane.showMessageDialog(null, "Error");
+                    }
                 }
             }
         });
@@ -165,37 +155,20 @@ public class testMcd extends JFrame {
         // Read data
         read.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                // Read data from text file
-                Vector<Vector<String>> data = new Vector<>();
+
+                try{
+                FileReader reader = new FileReader("data.txt");
+                BufferedReader br = new BufferedReader(reader);
                 String line;
-                try (BufferedReader br = new BufferedReader(new FileReader("data.txt"))) {
-                    while ((line = br.readLine()) != null) {
-                        Vector<String> row = new Vector<>();
-                        String[] values = line.split(",");
-                        for (String value : values) {
-                            row.add(value);
-                        }
-                        data.add(row);
-                    }
-                } catch (IOException e1) {
-                    e1.printStackTrace();
+                while((line = br.readLine()) != null){
+                    String[] elt = line.split(",");
+                    model2.addRow(elt);
                 }
+            }catch(IOException ioe){
+                JOptionPane.showMessageDialog(null, "Error");
+            }
 
-                // Create TableModel and JTable
-                Vector<String> columnNames = new Vector<>();
 
-                // Assuming the first line in the file contains column names
-                try (BufferedReader br = new BufferedReader(new FileReader("data.txt"))) {
-                    if ((line = br.readLine()) != null) {
-                        String[] columnValues = line.split(",");
-                        for (String columnValue : columnValues) {
-                            columnNames.add(columnValue);
-                        }
-                    }
-                    model2.addRow(columnNames);
-                } catch (IOException e2) {
-                    e2.printStackTrace();
-                }
             }
         });
 
@@ -314,41 +287,6 @@ public class testMcd extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 // Clear all rows from the table
                 model2.setRowCount(0);
-            }
-        });
-
-        // add
-        add1.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e2) {
-                String id2 = id1.getText();
-                String c2 = c1.getText();
-                String e3 = e1.getText();
-                String d2 = d1.getText();
-                if (id2.isEmpty() || c2.isEmpty() || e3.isEmpty() || d2.isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "ID, etat, rA, duree and cout cannot be empty.", "Error",
-                            JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
-
-                try {
-                    // "Identité", "Resource Affectée", "Cout","Durée", "État"
-                    model2.addRow(new Object[] { id1, rA1.getSelectedItem(), c1, d1, e1 });
-
-                } catch (NumberFormatException ex) {
-                    JOptionPane.showMessageDialog(null, "Score must be an integer.", "Error",
-                            JOptionPane.ERROR_MESSAGE);
-                }
-            }
-        });
-
-        filterButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                String text = filterText.getText();
-                if (text.length() == 0) {
-                    sorter.setRowFilter(null);
-                } else {
-                    sorter.setRowFilter(RowFilter.regexFilter("(?i)" + text));
-                }
             }
         });
     }
