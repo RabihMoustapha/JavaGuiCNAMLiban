@@ -1,3 +1,4 @@
+
 import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.table.*;
@@ -37,7 +38,7 @@ public class testMcd extends JFrame {
     public testMcd() {
         // Mcd Processus
         demo = new JTabbedPane();
-        p1 = new JPanel(new GridLayout(6, 2));
+        p1 = new JPanel(new GridLayout(7, 2));
         p2 = new JPanel();
         p3 = new JPanel();
         p4 = new JPanel(new BorderLayout());
@@ -66,9 +67,10 @@ public class testMcd extends JFrame {
         reset = new JButton("Reset");
         add = new JButton("Add");
         read = new JButton("ReadData");
+        filterButton = new JButton("Filter");
 
         // Processus JTable componets
-        String[] columnNames = { "Identité", "Resource Affectée", "Cout", "Durée", "État" };
+        String[] columnNames = {"Identité", "Resource Affectée", "Cout", "Durée", "État"};
         DefaultTableModel model2 = new DefaultTableModel(columnNames, 0);
         table = new JTable(model2);
         scrollPane = new JScrollPane(table);
@@ -78,7 +80,6 @@ public class testMcd extends JFrame {
         table.setRowSorter(sorter);
         filterText = new JTextField();
         filterText.setToolTipText("Filter");
-        filterButton = new JButton("Filter");
 
         p1.add(idL);
         p1.add(id);
@@ -100,8 +101,8 @@ public class testMcd extends JFrame {
         p2.add(add);
         p2.add(reload);
         p2.add(reset);
-        p2.add(filterButton);
         p2.add(read);
+        p2.add(filterButton);
 
         p3.add(scrollPane);
         p4.add(p1, BorderLayout.NORTH);
@@ -138,14 +139,13 @@ public class testMcd extends JFrame {
                 String e1 = e.getText();
                 String d1 = d.getText();
 
-                if(id1!=null && c1!=null && e1!=null && d1!=null){
-                    try{
+                if (id1 != null && c1 != null && e1 != null && d1 != null) {
+                    try {
                         FileWriter w = new FileWriter("data.txt");
-                        w.write(id1 + ", " + c1 + ", " + e1 + ", " + d1);
-                        w.write("\n");
+                        w.write(id1 + ", " + rA.getSelectedItem() + ", " + c1 + ", " + e1 + ", " + d1 + "\n");
                         w.close();
                         JOptionPane.showMessageDialog(null, "DataAdded");
-                    }catch(IOException ioe){
+                    } catch (IOException ioe) {
                         JOptionPane.showMessageDialog(null, "Error");
                     }
                 }
@@ -156,19 +156,40 @@ public class testMcd extends JFrame {
         read.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
 
-                try{
-                FileReader reader = new FileReader("data.txt");
-                BufferedReader br = new BufferedReader(reader);
-                String line;
-                while((line = br.readLine()) != null){
-                    String[] elt = line.split(",");
-                    model2.addRow(elt);
+                try {
+                    FileReader reader = new FileReader("data.txt");
+                    BufferedReader br = new BufferedReader(reader);
+                    String line;
+                    while ((line = br.readLine()) != null) {
+                        String[] elt = line.split(",");
+                        model2.addRow(elt);
+                    }
+                } catch (IOException ioe) {
+                    JOptionPane.showMessageDialog(null, "Error");
                 }
-            }catch(IOException ioe){
-                JOptionPane.showMessageDialog(null, "Error");
+
             }
+        });
 
+        //Filter action listner
+        filterButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String filter = filterText.getText();
+                //sorter = new TableRowSorter<>(model);
+                RowFilter<DefaultTableModel, Object> rf = null;
+                rf = RowFilter.regexFilter(filter);
+                sorter.setRowFilter(rf);
+                table.setRowSorter(sorter);
+            }
+        });
 
+        //comboBox action
+        rA.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String selected = (String) rA.getSelectedItem();
+                if (selected.equals("Resource Humaine")) {
+                    new ResourceHumaine();
+                }
             }
         });
 
@@ -220,7 +241,7 @@ public class testMcd extends JFrame {
         add1 = new JButton("Add");
 
         // JTable componets
-        String[] columnNames1 = { "Identité", "Resource Affectée", "Cout", "Durée", "État" };
+        String[] columnNames1 = {"Identité", "Resource Affectée", "Cout", "Durée", "État"};
         DefaultTableModel model4 = new DefaultTableModel(columnNames1, 0);
         table1 = new JTable(model4);
         scrollPane1 = new JScrollPane(table1);
@@ -289,13 +310,129 @@ public class testMcd extends JFrame {
                 model2.setRowCount(0);
             }
         });
+        setVisible(true);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(300, 300);
     }
 
     public static void main(String[] args) {
+        SwingUtilities.invokeLater(testMcd::new);
+    }
+}
 
-        testMcd mcd = new testMcd();
-        mcd.setVisible(true);
-        mcd.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        mcd.setSize(300, 300);
+class ResourceHumaine extends JFrame {
+    // Filter
+    private JLabel filterLabel;
+    private TableRowSorter<DefaultTableModel> sorter;
+    private JTextField filterText;
+    private JButton filterButton;
+
+    // Resource Humaine
+    private JPanel p1, p2, p3, p4; // Panels
+    private JLabel idL, spL, fL, tphL; // Labels
+    private JTextField id, sp, f, tph; // TextFields
+    private JButton reload, reset, add, read;
+    private JTable table;
+    private JScrollPane scrollPane;
+
+    public ResourceHumaine() {
+        super("Resurce huamine");
+        
+        p1 = new JPanel(new GridLayout(5, 2));
+        p2 = new JPanel();
+        p3 = new JPanel();
+        p4 = new JPanel(new BorderLayout());
+
+        // Resource Humaine Labels
+        idL = new JLabel("Identité");
+        spL = new JLabel("Spécialité");
+        fL = new JLabel("Fonction");
+        tphL = new JLabel("Tarif Par Heure");
+        filterLabel = new JLabel("Filter");
+
+        // Resource Humaine TextFields
+        id = new JTextField();
+        DefaultComboBoxModel<String> model = new DefaultComboBoxModel<String>();
+        sp = new JTextField();
+        f = new JTextField();
+        tph = new JTextField();
+        filterText = new JTextField();
+
+        // Resource Humaine Buttons
+        reload = new JButton("Reload");
+        reset = new JButton("Reset");
+        add = new JButton("Add");
+        read = new JButton("ReadData");
+        filterButton = new JButton("Filter");
+
+        // Resource Humaine JTable componets
+        String[] columnNames = {"Identité", "Spécialité", "Fonction", "TPH"};
+        DefaultTableModel model2 = new DefaultTableModel(columnNames, 0);
+        table = new JTable(model2);
+        scrollPane = new JScrollPane(table);
+
+        // Filter componets
+        sorter = new TableRowSorter<>(model2);
+        table.setRowSorter(sorter);
+        filterText = new JTextField();
+        filterText.setToolTipText("Filter");
+
+        p1.add(idL);
+        p1.add(id);
+
+        p1.add(spL);
+        p1.add(sp);
+
+        p1.add(fL);
+        p1.add(f);
+
+        p1.add(tphL);
+        p1.add(tph);
+
+        p1.add(filterLabel);
+        p1.add(filterText);
+
+        p2.add(add);
+        p2.add(reload);
+        p2.add(reset);
+        p2.add(read);
+        p2.add(filterButton);
+
+        p3.add(scrollPane);
+        p4.add(p1, BorderLayout.NORTH);
+        p4.add(p2, BorderLayout.CENTER);
+        p4.add(p3, BorderLayout.SOUTH);
+        add(p4);
+        // Reset
+        reset.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e1) {
+                // Clear the text fields
+                id.setText("");
+                f.setText("");
+                sp.setText("");
+                tph.setText("");
+            }
+        });
+
+        // Reload
+        reload.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                // Clear all rows from the table
+                model2.setRowCount(0);
+            }
+        });
+
+        //Filter action listner
+        filterButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String filter = filterText.getText();
+                //sorter = new TableRowSorter<>(model);
+                RowFilter<DefaultTableModel, Object> rf = null;
+                rf = RowFilter.regexFilter(filter);
+                sorter.setRowFilter(rf);
+                table.setRowSorter(sorter);
+            }
+    });
+    setVisible(true);
     }
 }
