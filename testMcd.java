@@ -1,4 +1,5 @@
 
+import com.sun.jdi.connect.Connector;
 import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.table.*;
@@ -55,8 +56,9 @@ public class testMcd extends JFrame {
         id = new JTextField();
         DefaultComboBoxModel<String> model = new DefaultComboBoxModel<String>();
         rA = new JComboBox<String>(model);
+        rA.addItem("");
         rA.addItem("Resource Humaine");
-        rA.addItem("Resource materielle");
+        rA.addItem("Resource Materielle");
         JScrollPane rAs = new JScrollPane(rA);
         c = new JTextField();
         d = new JTextField();
@@ -189,6 +191,10 @@ public class testMcd extends JFrame {
                 String selected = (String) rA.getSelectedItem();
                 if (selected.equals("Resource Humaine")) {
                     new ResourceHumaine();
+                }
+
+                if(selected.equals("Resource Materielle")){
+                    new ResourceMaterielle();
                 }
             }
         });
@@ -434,5 +440,116 @@ class ResourceHumaine extends JFrame {
             }
     });
     setVisible(true);
+    }
+}
+
+class ResourceMaterielle extends JFrame {
+
+    private JPanel p1, p2, p3, p4;
+    private JLabel idL, spL, fL, tphL, filterLabel;
+    private JTextField id, sp, f, tph, filterText;
+    private JButton reload, add, filterButton, reset, read;
+    private JTable table;
+    private JScrollPane scrollPane;
+    private TableRowSorter<DefaultTableModel> sorter;
+
+    public ResourceMaterielle() {
+        super("Resource Materielle");
+        p1 = new JPanel(new GridLayout(5, 2));
+        p2 = new JPanel();
+        p3 = new JPanel();
+        p4 = new JPanel(new BorderLayout());
+
+        // Resource Humaine Labels
+        idL = new JLabel("Identité");
+        spL = new JLabel("Spécialité");
+        fL = new JLabel("Fonction");
+        tphL = new JLabel("Tarif Par Heure");
+        filterLabel = new JLabel("Filter");
+
+        // Resource Humaine TextFields
+        id = new JTextField();
+        DefaultComboBoxModel<String> model = new DefaultComboBoxModel<String>();
+        sp = new JTextField();
+        f = new JTextField();
+        tph = new JTextField();
+        filterText = new JTextField();
+
+        // Resource Humaine Buttons
+        reload = new JButton("Reload");
+        reset = new JButton("Reset");
+        add = new JButton("Add");
+        read = new JButton("ReadData");
+        filterButton = new JButton("Filter");
+
+        // Resource Humaine JTable componets
+        String[] columnNames = {"Identité", "Spécialité", "Fonction", "TPH"};
+        DefaultTableModel model2 = new DefaultTableModel(columnNames, 0);
+        table = new JTable(model2);
+        scrollPane = new JScrollPane(table);
+
+        // Filter componets
+        sorter = new TableRowSorter<>(model2);
+        table.setRowSorter(sorter);
+        filterText = new JTextField();
+        filterText.setToolTipText("Filter");
+
+        p1.add(idL);
+        p1.add(id);
+
+        p1.add(spL);
+        p1.add(sp);
+
+        p1.add(fL);
+        p1.add(f);
+
+        p1.add(tphL);
+        p1.add(tph);
+
+        p1.add(filterLabel);
+        p1.add(filterText);
+
+        p2.add(add);
+        p2.add(reload);
+        p2.add(reset);
+        p2.add(read);
+        p2.add(filterButton);
+
+        p3.add(scrollPane);
+        p4.add(p1, BorderLayout.NORTH);
+        p4.add(p2, BorderLayout.CENTER);
+        p4.add(p3, BorderLayout.SOUTH);
+        add(p4);
+        // Reset
+        reset.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e1) {
+                // Clear the text fields
+                id.setText("");
+                f.setText("");
+                sp.setText("");
+                tph.setText("");
+            }
+        });
+
+        // Reload
+        reload.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                // Clear all rows from the table
+                model2.setRowCount(0);
+            }
+        });
+
+        //Filter action listner
+        filterButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String filter = filterText.getText();
+                //sorter = new TableRowSorter<>(model);
+                RowFilter<DefaultTableModel, Object> rf = null;
+                rf = RowFilter.regexFilter(filter);
+                sorter.setRowFilter(rf);
+                table.setRowSorter(sorter);
+            }
+        });
+        setVisible(true);
     }
 }
