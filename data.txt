@@ -1,2 +1,1 @@
-Rabih, Computer Science, 0
-Yasser, Computer Science, 0
+omlk, Resource Materielle, 100, sa, 18
