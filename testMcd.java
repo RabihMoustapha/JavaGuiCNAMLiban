@@ -23,7 +23,7 @@ public class testMcd extends JFrame {
     private JPanel p1, p2, p3, p4; // Panels
     private JLabel idL, raL, cL, dL, eL; // Labels
     private JTextField id, c, d, e; // TextFields
-    private JButton reload, reset, add;
+    private JButton  reset, add;
     private JTable table;
     private JScrollPane scrollPane;
     private JComboBox<String> rA;
@@ -80,7 +80,6 @@ public class testMcd extends JFrame {
         e = new JTextField();
 
         // Processus Buttons
-        reload = new JButton("Reload");
         reset = new JButton("Reset");
         add = new JButton("Add");
         read = new JButton("ReadData");
@@ -116,7 +115,6 @@ public class testMcd extends JFrame {
         p1.add(filterText);
 
         p2.add(add);
-        p2.add(reload);
         p2.add(reset);
         p2.add(read);
         p2.add(filterButton);
@@ -139,15 +137,6 @@ public class testMcd extends JFrame {
             }
         });
 
-        // Reload
-        reload.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Clear all rows from the table
-                model2.setRowCount(0);
-            }
-        });
-
         // Add
         add.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e2) {
@@ -156,23 +145,24 @@ public class testMcd extends JFrame {
                 String e1 = e.getText();
                 String d1 = d.getText();
 
-                if (id1 != null && c1 != null && e1 != null && d1 != null) {
+                while(id1 != null && c1 != null && e1 != null && d1 != null) {
                     try {
-                        FileWriter w = new FileWriter("data.txt");
-                        w.write(id1 + ", " + rA.getSelectedItem() + ", " + c1 + ", " + e1 + ", " + d1 + "\n");
-                        w.close();
-                        JOptionPane.showMessageDialog(null, "DataAdded");
+                        FileWriter w = new FileWriter("data.txt", true);
+                        BufferedWriter bw = new BufferedWriter(w);
+                        String data = id1 + ", " + rA.getSelectedItem() + ", " + c1 + ", " + e1 + ", " + d1 + "\n";
+                        bw.write(data);
+                        bw.newLine();
                     } catch (IOException ioe) {
                         JOptionPane.showMessageDialog(null, "Error");
                     }
                 }
+                //JOptionPane.showMessageDialog(null, "DataAdded");
             }
         });
 
         // Read data
         read.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-
                 try {
                     FileReader reader = new FileReader("data.txt");
                     BufferedReader br = new BufferedReader(reader);
@@ -192,7 +182,6 @@ public class testMcd extends JFrame {
         filterButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 String filter = filterText.getText();
-                //sorter = new TableRowSorter<>(model);
                 RowFilter<DefaultTableModel, Object> rf = null;
                 rf = RowFilter.regexFilter(filter);
                 sorter.setRowFilter(rf);
@@ -257,7 +246,6 @@ public class testMcd extends JFrame {
         pe = new JTextField();
 
         // Buttons
-        reload1 = new JButton("Reload");
         reset1 = new JButton("Reset");
         add1 = new JButton("Add");
 
@@ -323,15 +311,6 @@ public class testMcd extends JFrame {
             }
         });
 
-        // reload
-        reload1.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Clear all rows from the table
-                model2.setRowCount(0);
-            }
-        });
-
         //Tache
         p9 = new JPanel(new GridLayout(6, 2));
         p10 = new JPanel();
@@ -358,7 +337,6 @@ public class testMcd extends JFrame {
         reload2 = new JButton("Reload");
         filterButton1 = new JButton("Filter");
         addProcessus = new JButton("Add Processus");
-        JButton ReadProcessusButton = new JButton("Read processus data");
 
         //Add componets
         p9.add(idL2);
@@ -381,7 +359,6 @@ public class testMcd extends JFrame {
         p10.add(reload2);
         p10.add(filterButton1);
         p10.add(addProcessus);
-        p10.add(ReadProcessusButton);
 
         //Add panels to the main panel
         p12.add(p9, BorderLayout.NORTH);
@@ -393,12 +370,6 @@ public class testMcd extends JFrame {
         addProcessus.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 Processus p = new Processus();
-            }
-        });
-
-        ReadProcessusButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                new readProcessus();
             }
         });
 
@@ -424,7 +395,7 @@ class ResourceHumaine extends JFrame {
     private JPanel p1, p2, p3, p4; // Panels
     private JLabel idL, spL, fL, tphL; // Labels
     private JTextField id, sp, f, tph; // TextFields
-    private JButton reload, reset, add, read;
+    private JButton  reset, add, read;
     private JTable table;
     private JScrollPane scrollPane;
 
@@ -452,7 +423,6 @@ class ResourceHumaine extends JFrame {
         filterText = new JTextField();
 
         // Resource Humaine Buttons
-        reload = new JButton("Reload");
         reset = new JButton("Reset");
         add = new JButton("Add");
         read = new JButton("ReadData");
@@ -507,14 +477,6 @@ class ResourceHumaine extends JFrame {
             }
         });
 
-        // Reload
-        reload.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                // Clear all rows from the table
-                model2.setRowCount(0);
-            }
-        });
-
         //Filter action listner
         filterButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -536,7 +498,7 @@ class ResourceMaterielle extends JFrame {
     private JPanel p1, p2, p3, p4;
     private JLabel idL, spL, fL, tphL, filterLabel;
     private JTextField id, sp, f, tph, filterText;
-    private JButton reload, add, filterButton, reset, read;
+    private JButton add, filterButton, reset, read;
     private JTable table;
     private JScrollPane scrollPane;
     private TableRowSorter<DefaultTableModel> sorter;
@@ -564,7 +526,6 @@ class ResourceMaterielle extends JFrame {
         filterText = new JTextField();
 
         // Resource Humaine Buttons
-        reload = new JButton("Reload");
         reset = new JButton("Reset");
         add = new JButton("Add");
         read = new JButton("ReadData");
@@ -598,7 +559,6 @@ class ResourceMaterielle extends JFrame {
         p1.add(filterText);
 
         p2.add(add);
-        p2.add(reload);
         p2.add(reset);
         p2.add(read);
         p2.add(filterButton);
@@ -619,14 +579,6 @@ class ResourceMaterielle extends JFrame {
             }
         });
 
-        // Reload
-        reload.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                // Clear all rows from the table
-                model2.setRowCount(0);
-            }
-        });
-
         //Filter action listner
         filterButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -636,6 +588,46 @@ class ResourceMaterielle extends JFrame {
                 rf = RowFilter.regexFilter(filter);
                 sorter.setRowFilter(rf);
                 table.setRowSorter(sorter);
+            }
+        });
+
+        add.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e2) {
+                String id1 = id.getText();
+                String sp1 = sp.getText();
+                String tph1 = tph.getText();
+                String f1 = f.getText();
+
+                while(id1 != null && sp1 != null && tph1 != null && f1 != null) {
+                    try {
+                        FileWriter w = new FileWriter("ResourceHumaine.txt", true);
+                        BufferedWriter bw = new BufferedWriter(w);
+                        String data = id1 + ", " + sp1 + ", " + tph1 + ", " + f1 + "\n";
+                        bw.write(data);
+                        bw.newLine();
+                        JOptionPane.showMessageDialog(null, "DataAdded");
+                    } catch (IOException ioe) {
+                        JOptionPane.showMessageDialog(null, "Error");
+                    }
+                }
+            }
+        });
+
+        // Read data
+        read.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    FileReader reader = new FileReader("ResourceHumaine.txt");
+                    BufferedReader br = new BufferedReader(reader);
+                    String line;
+                    while ((line = br.readLine()) != null) {
+                        String[] elt = line.split(",");
+                        model2.addRow(elt);
+                    }
+                } catch (IOException ioe) {
+                    JOptionPane.showMessageDialog(null, "Error");
+                }
+
             }
         });
         setVisible(true);
@@ -765,9 +757,10 @@ class Processus extends JFrame {
 
                 if (id1 != null && c1 != null && e1 != null && d1 != null) {
                     try {
-                        FileWriter w = new FileWriter("Processus.txt");
+                        FileWriter w = new FileWriter("Processus.txt", true);
                         BufferedWriter bw = new BufferedWriter(w);
-                        bw.write(id1 + ", " + rA.getSelectedItem() + ", " + c1 + ", " + e1 + ", " + d1 + "\n");
+                        String data = id1 + ", " + rA.getSelectedItem() + ", " + c1 + ", " + e1 + ", " + d1;
+                        bw.write(data);
                         bw.newLine();
                         JOptionPane.showMessageDialog(null, "DataAdded");
                     } catch (IOException ioe) {
@@ -820,7 +813,8 @@ class Processus extends JFrame {
                 if (selected.equals("Resource Materielle")) {
                     new ResourceMaterielle();
                 }
-            }
+ 
+           }
         });
         setVisible(true);
         setSize(300, 300);

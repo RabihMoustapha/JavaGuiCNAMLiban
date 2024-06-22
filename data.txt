@@ -1,1 +1,1 @@
-omlk, Resource Materielle, 100, sa, 18
+1, Resource Materielle, 2, 3, 5
