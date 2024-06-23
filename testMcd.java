@@ -8,7 +8,6 @@ import java.awt.event.*;
 import java.io.*;
 import java.util.*;
 
-
 public class testMcd extends JFrame {
 
     private JTabbedPane demo;
@@ -23,7 +22,7 @@ public class testMcd extends JFrame {
     private JPanel p1, p2, p3, p4; // Panels
     private JLabel idL, raL, cL, dL, eL; // Labels
     private JTextField id, c, d, e; // TextFields
-    private JButton  reset, add;
+    private JButton reset, add;
     private JTable table;
     private JScrollPane scrollPane;
     private JComboBox<String> rA;
@@ -145,7 +144,7 @@ public class testMcd extends JFrame {
                 String e1 = e.getText();
                 String d1 = d.getText();
 
-                while(id1 != null && c1 != null && e1 != null && d1 != null) {
+                while (id1 != null && c1 != null && e1 != null && d1 != null) {
                     try {
                         FileWriter w = new FileWriter("data.txt", true);
                         BufferedWriter bw = new BufferedWriter(w);
@@ -395,7 +394,7 @@ class ResourceHumaine extends JFrame {
     private JPanel p1, p2, p3, p4; // Panels
     private JLabel idL, spL, fL, tphL; // Labels
     private JTextField id, sp, f, tph; // TextFields
-    private JButton  reset, add, read;
+    private JButton reset, add, read;
     private JTable table;
     private JScrollPane scrollPane;
 
@@ -598,7 +597,7 @@ class ResourceMaterielle extends JFrame {
                 String tph1 = tph.getText();
                 String f1 = f.getText();
 
-                while(id1 != null && sp1 != null && tph1 != null && f1 != null) {
+                while (id1 != null && sp1 != null && tph1 != null && f1 != null) {
                     try {
                         FileWriter w = new FileWriter("ResourceHumaine.txt", true);
                         BufferedWriter bw = new BufferedWriter(w);
@@ -632,6 +631,7 @@ class ResourceMaterielle extends JFrame {
         });
         setVisible(true);
         setSize(300, 300);
+        
     }
 }
 
@@ -780,9 +780,9 @@ class Processus extends JFrame {
                     String line;
                     while ((line = br.readLine()) != null) {
                         if(!line.isEmpty()){
-                        String[] elt = line.split(",");
-                        model2.addRow(elt);
-                        }
+                        St ring[] elt = line .split(",");
+                            model2.addRow(elt);
+                            }
                     }
                 } catch (IOException ioe) {
                     JOptionPane.showMessageDialog(null, "Error");
@@ -814,8 +814,8 @@ class Processus extends JFrame {
                     new ResourceMaterielle();
                 }
  
-           }
-        });
+          }
+            
         setVisible(true);
         setSize(300, 300);
     }
