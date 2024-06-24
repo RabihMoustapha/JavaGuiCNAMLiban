@@ -1,4 +1,3 @@
-
 import com.sun.jdi.connect.Connector;
 import javax.swing.*;
 import javax.swing.event.*;
@@ -202,7 +201,7 @@ public class testMcd extends JFrame {
             }
         });
 
-        // mcd Projet
+        // Projet
         p5 = new JPanel(new GridLayout(5, 2));
         p6 = new JPanel();
         p7 = new JPanel();
@@ -368,7 +367,7 @@ public class testMcd extends JFrame {
 
         addProcessus.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                Processus p = new Processus();
+               new Processus();
             }
         });
 
@@ -397,6 +396,8 @@ class ResourceHumaine extends JFrame {
     private JButton reset, add, read;
     private JTable table;
     private JScrollPane scrollPane;
+    private DefaultComboBoxModel<String> model;
+    private DefaultTableModel model2;
 
     public ResourceHumaine() {
         super("Resurce huamine");
@@ -415,7 +416,7 @@ class ResourceHumaine extends JFrame {
 
         // Resource Humaine TextFields
         id = new JTextField();
-        DefaultComboBoxModel<String> model = new DefaultComboBoxModel<String>();
+        model = new DefaultComboBoxModel<String>();
         sp = new JTextField();
         f = new JTextField();
         tph = new JTextField();
@@ -429,7 +430,7 @@ class ResourceHumaine extends JFrame {
 
         // Resource Humaine JTable componets
         String[] columnNames = {"Identité", "Spécialité", "Fonction", "TPH"};
-        DefaultTableModel model2 = new DefaultTableModel(columnNames, 0);
+        model2 = new DefaultTableModel(columnNames, 0);
         table = new JTable(model2);
         scrollPane = new JScrollPane(table);
 
@@ -455,7 +456,6 @@ class ResourceHumaine extends JFrame {
         p1.add(filterText);
 
         p2.add(add);
-        p2.add(reload);
         p2.add(reset);
         p2.add(read);
         p2.add(filterButton);
@@ -463,8 +463,9 @@ class ResourceHumaine extends JFrame {
         p3.add(scrollPane);
         p4.add(p1, BorderLayout.NORTH);
         p4.add(p2, BorderLayout.CENTER);
-        p4.add(p3, BorderLayout.SOUTH);
+p4.add(p3, BorderLayout.SOUTH);
         add(p4);
+        
         // Reset
         reset.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e1) {
@@ -484,9 +485,51 @@ class ResourceHumaine extends JFrame {
                 RowFilter<DefaultTableModel, Object> rf = null;
                 rf = RowFilter.regexFilter(filter);
                 sorter.setRowFilter(rf);
-                table.setRowSorter(sorter);
+                        table.setRowSorter(sorter);
+            }
+});
+        add.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e2) {
+                String id1 = id.getText();
+                String sp1 = sp.getText();
+                String tph1 = tph.getText();
+                String f1 = f.getText();
+
+                while (id1 != null && sp1 != null && tph1 != null && f1 != null) {
+                    try {
+                        FileWriter w = new FileWriter("ResourceMaterielle.txt", true);
+                        BufferedWriter bw = new BufferedWriter(w);
+                        String data = id1 + ", " + sp1 + ", " + tph1 + ", " + f1 + "\n";
+                        bw.write(data);
+                        bw.newLine();
+                        JOptionPane.showMessageDialog(null, "DataAdded");
+                        bw.close();
+                    } catch (IOException ioe) {
+                        JOptionPane.showMessageDialog(null, "Error");
+                    }
+                }
             }
         });
+
+        // Read data
+        read.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    FileReader reader = new FileReader("ResourceHumaine.txt");
+                    BufferedReader br = new BufferedReader(reader);
+                    String line;
+                    while ((line = br.readLine()) != null) {
+                        String[] elt = line.split(",");
+                        model2.addRow(elt);
+                        br.close();
+                    }
+                } catch (IOException ioe) {
+                    JOptionPane.showMessageDialog(null, "Error");
+                }
+
+    }
+        });
+        
         setVisible(true);
         setSize(300, 300);
     }
@@ -599,12 +642,13 @@ class ResourceMaterielle extends JFrame {
 
                 while (id1 != null && sp1 != null && tph1 != null && f1 != null) {
                     try {
-                        FileWriter w = new FileWriter("ResourceHumaine.txt", true);
+                        FileWriter w = new FileWriter("ResourceMaterielle.txt", true);
                         BufferedWriter bw = new BufferedWriter(w);
                         String data = id1 + ", " + sp1 + ", " + tph1 + ", " + f1 + "\n";
                         bw.write(data);
                         bw.newLine();
                         JOptionPane.showMessageDialog(null, "DataAdded");
+                        bw.close();
                     } catch (IOException ioe) {
                         JOptionPane.showMessageDialog(null, "Error");
                     }
@@ -622,6 +666,7 @@ class ResourceMaterielle extends JFrame {
                     while ((line = br.readLine()) != null) {
                         String[] elt = line.split(",");
                         model2.addRow(elt);
+                        br.close();
                     }
                 } catch (IOException ioe) {
                     JOptionPane.showMessageDialog(null, "Error");
@@ -777,10 +822,10 @@ class Processus extends JFrame {
                 try {
                     FileReader reader = new FileReader("Processus.txt");
                     BufferedReader br = new BufferedReader(reader);
-                    String line;
-                    while ((line = br.readLine()) != null) {
+                    String  line;
+                        while ((line = br.readLine()) != null) {
                         if(!line.isEmpty()){
-                        St ring[] elt = line .split(",");
+                        String[] elt = line .split(",");
                             model2.addRow(elt);
                             }
                     }
@@ -811,11 +856,332 @@ class Processus extends JFrame {
                 }
 
                 if (selected.equals("Resource Materielle")) {
-                    new ResourceMaterielle();
+                      new ResourceMaterielle();
                 }
- 
           }
-            
+        });
+        setVisible(true);
+        setSize(300, 300);
+    }
+} 
+
+    
+class Projet extends JFrame{
+    //Filter
+    private JLabel filterLabel;
+    private TableRowSorter<DefaultTableModel> sorter;
+    private JTextField filterText;
+    private JButton filterButton;
+
+    // Projet  
+    private JPanel p1, p2, p3, p4; // Panels
+    private JLabel idL,  cL, dL, eL; // Labels
+    private JTextField id, c, d, e; // TextFields
+    private JButton reset, add, read, addTache;
+    private JTable table;
+    private JScrollPane scrollPane;
+
+    public Projet() {
+        super("Projet");
+        p1 = new JPanel(new GridLayout(7, 2));
+        p2 = new JPanel();
+        p3 = new JPanel();
+        p4 = new JPanel(new BorderLayout());
+
+        //Labels
+        idL = new JLabel("Identité");
+        dL = new JLabel("Durée");
+        cL = new JLabel("Cout");
+        eL = new JLabel("État");
+        filterLabel = new JLabel("Filter");
+
+        //TextFields
+        id = new JTextField();
+        c = new JTextField();
+        d = new JTextField();
+        e = new JTextField();
+
+        // Projet Buttons
+        reset = new JButton("Reset");
+        add = new JButton("Add");
+        read = new JButton("ReadData");
+        filterButton = new JButton("Filter");
+        addTache = new JButton("Add tache");
+
+        // Projet JTable componets
+        String[] columnNames = {"Identité", "Cout", "Durée", "État"};
+        DefaultTableModel model2 = new DefaultTableModel(columnNames, 0);
+        table = new JTable(model2);
+        scrollPane = new JScrollPane(table);
+
+        // Filter componets
+        sorter = new TableRowSorter<>(model2);
+        table.setRowSorter(sorter);
+        filterText = new JTextField();
+        filterText.setToolTipText("Filter");
+
+        p1.add(idL);
+        p1.add(id);
+
+        p1.add(cL);
+        p1.add(c);
+
+        p1.add(eL);
+        p1.add(e);
+
+        p1.add(dL);
+        p1.add(d);
+        p1.add(filterLabel);
+        p1.add(filterText);
+
+        p2.add(add);
+        p2.add(addTache);
+        p2.add(reset);
+        p2.add(read);
+        p2.add(filterButton);
+
+        p3.add(scrollPane);
+        p4.add(p1, BorderLayout.NORTH);
+        p4.add(p2, BorderLayout.CENTER);
+        p4.add(p3, BorderLayout.SOUTH);
+        add(p4);
+        // Reset
+        reset.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e1) {
+                // Clear the text fields
+                c.setText("");
+                d.setText("");
+                id.setText("");
+                e.setText("");
+            }
+        });
+
+        // Add
+        add.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e2) {
+                String id1 = id.getText();
+                String c1 = c.getText();
+                String e1 = e.getText();
+                String d1 = d.getText();
+
+                if (id1 != null && c1 != null && e1 != null && d1 != null) {
+                    try {
+                        FileWriter w = new FileWriter("Projet.txt", true);
+                        BufferedWriter bw = new BufferedWriter(w);
+                        String data = id1 + ", " + ", " + c1 + ", " + e1 + ", " + d1;
+                        bw.write(data);
+                        bw.newLine();
+                        JOptionPane.showMessageDialog(null, "DataAdded");
+                        bw.close();
+                    } catch (IOException ioe) {
+                        JOptionPane.showMessageDialog(null, "Error");
+                    }
+                }
+            }
+        });
+
+        // Read data
+        read.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+
+                try {
+                    FileReader reader = new FileReader("Projet.txt");
+                    BufferedReader br = new BufferedReader(reader);
+                    String  line; 
+                        while ((line = br.readLine()) != null) {
+                        if(!line.isEmpty()){
+                        String[] elt = line .split(",");
+                        model2.addRow(elt);
+                            br.close();
+                            }
+                    }
+                } catch (IOException ioe) {
+                    JOptionPane.showMessageDialog(null, "Error");
+                }
+
+            }
+        });
+        //Filter action listner
+        filterButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String filter = filterText.getText();
+                sorter = new TableRowSorter<>(model2);
+                RowFilter<DefaultTableModel, Object> rf = null;
+                rf = RowFilter.regexFilter(filter);
+                sorter.setRowFilter(rf);
+                table.setRowSorter(sorter);
+            }
+        });
+ 
+        //Add tache 
+        addTache.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                new Tache();
+            }
+        });
+
+        setVisible(true);
+        setSize(300, 300);
+    }
+} 
+
+    
+class Tache extends JFrame{
+    //Filter
+    private JLabel filterLabel;
+    private TableRowSorter<DefaultTableModel> sorter;
+    private JTextField filterText;
+    private JButton filterButton;
+
+    // Tache 
+    private JPanel p1, p2, p3, p4; // Panels
+    private JLabel idL, cL, dL, eL; // Labels
+    private JTextField id, c, d, e; // TextFields
+    private JButton reset, add, read, addProcessus;
+    private JTable table;
+    private JScrollPane scrollPane;
+
+    public Tache() {
+        super("Tache");
+        p1 = new JPanel(new GridLayout(5, 2));
+        p2 = new JPanel();
+        p3 = new JPanel();
+        p4 = new JPanel(new BorderLayout());
+
+        //Labels
+        idL = new JLabel("Identité");
+        dL = new JLabel("Durée");
+        cL = new JLabel("Cout");
+        eL = new JLabel("État");
+        filterLabel = new JLabel("Filter");
+
+        //TextFields
+        id = new JTextField();
+        c = new JTextField();
+        d = new JTextField();
+        e = new JTextField();
+
+        // Tache Buttons
+        reset = new JButton("Reset");
+        add = new JButton("Add");
+        read = new JButton("ReadData");
+        filterButton = new JButton("Filter");
+        addProcessus = new JButton("Add processus");
+
+        // Tache JTable componets
+        String[] columnNames = {"Identité", "Cout", "Durée", "État"};
+        DefaultTableModel model2 = new DefaultTableModel(columnNames, 0);
+        table = new JTable(model2);
+        scrollPane = new JScrollPane(table);
+
+        // Filter componets
+        sorter = new TableRowSorter<>(model2);
+        table.setRowSorter(sorter);
+        filterText = new JTextField();
+        filterText.setToolTipText("Filter");
+
+        p1.add(idL);
+        p1.add(id);
+
+        p1.add(cL);
+        p1.add(c);
+
+        p1.add(eL);
+        p1.add(e);
+
+        p1.add(dL);
+        p1.add(d);
+        p1.add(filterLabel);
+        p1.add(filterText);
+
+        p2.add(add);
+        p2.add(addProcessus);
+        p2.add(reset);
+        p2.add(read);
+        p2.add(filterButton);
+
+        p3.add(scrollPane);
+        p4.add(p1, BorderLayout.NORTH);
+        p4.add(p2, BorderLayout.CENTER);
+        p4.add(p3, BorderLayout.SOUTH);
+        add(p4);
+        // Reset
+        reset.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e1) {
+                // Clear the text fields
+                c.setText("");
+                d.setText("");
+                id.setText("");
+                e.setText("");
+            }
+        });
+
+        // Add
+        add.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e2) {
+                String id1 = id.getText();
+                String c1 = c.getText();
+                String e1 = e.getText();
+                String d1 = d.getText();
+
+                if (id1 != null && c1 != null && e1 != null && d1 != null) {
+                    try {
+                        FileWriter w = new FileWriter("Tache.txt", true);
+                        BufferedWriter bw = new BufferedWriter(w);
+                        String data = id1 + ", " + ", " + c1 + ", " + e1 + ", " + d1;
+                        bw.write(data);
+                        bw.newLine();
+                        JOptionPane.showMessageDialog(null, "DataAdded");
+                        bw.close();
+                    } catch (IOException ioe) {
+                        JOptionPane.showMessageDialog(null, "Error");
+                    }
+                }
+            }
+        });
+
+        // Read data
+        read.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+
+                try {
+                    FileReader reader = new FileReader("Tache.txt");
+                    BufferedReader br = new BufferedReader(reader);
+                    String  line; 
+                        while((line = br.readLine()) != null) {
+                        if(!line.isEmpty()){
+                        String[] elt = line .split(",");
+                        model2.addRow(elt);
+                            br.close();
+                            }
+                    }
+                } catch (IOException ioe) {
+                    JOptionPane.showMessageDialog(null, "Error");
+                }
+
+            }
+        });
+        //Filter action listner
+        filterButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String filter = filterText.getText();
+                sorter = new TableRowSorter<>(model2);
+                RowFilter<DefaultTableModel, Object> rf = null;
+                rf = RowFilter.regexFilter(filter);
+                sorter.setRowFilter(rf);
+                table.setRowSorter(sorter);
+            }
+        });
+ 
+        //Add tache 
+        addProcessus.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                new Processus();
+            }
+        });
+
         setVisible(true);
         setSize(300, 300);
     }
