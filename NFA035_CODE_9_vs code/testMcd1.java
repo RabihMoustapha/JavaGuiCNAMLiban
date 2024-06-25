@@ -43,7 +43,7 @@ public class testMcd1 extends JFrame {
     private JPanel p9, p10, p11, p12;
     private JLabel idL2, cL2, dL2, eL2;
     private JTextField id2, c2, d2, e2;
-    private JButton reload2, reset2, add2, addProcessus;
+    private JButton reset2, add2, addProcessus, read2;
     private JTable table2;
     private JScrollPane scrollPane2;
 
@@ -341,9 +341,10 @@ public class testMcd1 extends JFrame {
         add2 = new JButton("Add");
         filterButton1 = new JButton("Filter");
         addProcessus = new JButton("Add Processus");
+        read2 = new JButton("Read data");
 
         // Table
-        String[] columnNames2 = { "Identité", "Cout", "Durée", "État", "Total" };
+        String[] columnNames2 = { "Identité", "Cout", "Durée", "État"};
         model4 = new DefaultTableModel(columnNames2, 0);
         table2 = new JTable(model4);
         scrollPane2 = new JScrollPane(table2);
@@ -367,6 +368,7 @@ public class testMcd1 extends JFrame {
         p10.add(reset2);
         p10.add(filterButton1);
         p10.add(addProcessus);
+        p10.add(read2);
 
         p11.add(scrollPane2);
         // Add panels to the main panel
@@ -379,6 +381,29 @@ public class testMcd1 extends JFrame {
         addProcessus.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 new Processus();
+            }
+        });
+
+        reset2.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                c2.setText("");
+                d2.setText("");
+                id2.setText("");
+                e2.setText("");
+            }
+        });
+
+        read2.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                try(DataInputStream data = new DataInputStream(new FileInputStream("Tache.dat"))){
+                    int id3 = data.readInt();
+                    int c3 = data.readInt();
+                    String e3 = data.readUTF();
+                    String d3 = data.readUTF();
+                    model4.addRow(new Object[]{id3, c3, e3, d3});
+                }catch{
+                    JOptionPane.showMessageDialog(null, "Error");
+                }
             }
         });
 
@@ -805,6 +830,7 @@ class Processus extends JFrame {
                         String data = id1 + ", " + rA.getSelectedItem() + ", " + c1 + ", " + e1 + ", " + d1;
                         bw.write(data);
                         bw.newLine();
+                        bw.close();
                         JOptionPane.showMessageDialog(null, "DataAdded");
                     } catch (IOException ioe) {
                         JOptionPane.showMessageDialog(null, "Error");
