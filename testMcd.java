@@ -303,7 +303,7 @@ public class testMcd extends JFrame {
                     try {
                         FileWriter w = new FileWriter("Projet.txt", true);
                         BufferedWriter bw = new BufferedWriter(w);
-                        String data = id2 + ", " + ", " + c2 + ", " + e2 + ", " + d2;
+                        String data = id2 + ", "  + c2 + ", " + e2 + ", " + d2;
                         bw.write(data);
                         bw.newLine();
                         bw.close();
