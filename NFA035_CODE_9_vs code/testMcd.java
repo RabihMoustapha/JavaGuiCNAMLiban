@@ -28,7 +28,7 @@ public class testMcd extends JFrame {
     private JPanel p5, p6, p7, p8; // Panels
     private JLabel idL1, raL1, cL1, dL1, eL1; // Labels
     private JTextField id1, c1, d1, e1; // TextFields
-    private JButton addProcessus1, reset1, add1, read1;
+    private JButton addTache, reset1, add1, read1;
     private JTable table1;
     private JScrollPane scrollPane1;
     private DefaultTableModel model4;
@@ -43,7 +43,7 @@ public class testMcd extends JFrame {
     private JPanel p9, p10, p11, p12;
     private JLabel idL2, cL2, dL2, eL2;
     private JTextField id2, c2, d2, e2;
-    private JButton reload2, reset2, add2, addProcessus;
+    private JButton reset2, add2, addProcessus;
     private JTable table2;
     private JScrollPane scrollPane2;
 
@@ -222,7 +222,7 @@ public class testMcd extends JFrame {
         // Buttons
         reset1 = new JButton("Reset");
         add1 = new JButton("Add");
-        addProcessus1 = new JButton("Add processus");
+        addTache = new JButton("Add tache");
         read1 = new JButton("Read data");
 
         // JTable componets
@@ -247,7 +247,7 @@ public class testMcd extends JFrame {
         // p6
         p6.add(add1);
         p6.add(reset1);
-        p6.add(addProcessus1);
+        p6.add(addTache);
         p6.add(read1);
 
         // p7
@@ -269,9 +269,9 @@ public class testMcd extends JFrame {
             }
         });
 
-        addProcessus1.addActionListener(new ActionListener() {
+        addTache.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                new Processus();
+                new Tache();
             }
         });
 
@@ -804,6 +804,7 @@ class Processus extends JFrame {
                         String data = id1 + ", " + rA.getSelectedItem() + ", " + c1 + ", " + e1 + ", " + d1;
                         bw.write(data);
                         bw.newLine();
+                        bw.close();
                         JOptionPane.showMessageDialog(null, "DataAdded");
                     } catch (IOException ioe) {
                         JOptionPane.showMessageDialog(null, "Error");

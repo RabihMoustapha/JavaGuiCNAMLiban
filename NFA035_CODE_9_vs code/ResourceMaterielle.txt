@@ -1,2 +1,3 @@
 r1, Abdallah el asmar, 15, Dr en cnam
-c5, Dr, 20, Cnam liban
+c5, Dr, 20, Cnam libanold
+Dr oin cnam, 10, Tarif
