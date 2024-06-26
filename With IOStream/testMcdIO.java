@@ -5,7 +5,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 
-public class testMcd extends JFrame {
+public class testMcdIO extends JFrame {
 
     private JTabbedPane demo;
 
@@ -47,7 +47,7 @@ public class testMcd extends JFrame {
     private JTable table2;
     private JScrollPane scrollPane2;
 
-    public testMcd() {
+    public testMcdIO() {
         // Processus
         demo = new JTabbedPane();
         p1 = new JPanel(new GridLayout(7, 2));
@@ -391,7 +391,7 @@ public class testMcd extends JFrame {
         p10.add(reset2);
         p10.add(filterButton1);
         p10.add(addProcessus);
-
+        p10.add(read2);
         p11.add(scrollPane2);
         // Add panels to the main panel
         p12.add(p9, BorderLayout.NORTH);
@@ -465,7 +465,7 @@ public class testMcd extends JFrame {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(testMcd::new);
+        SwingUtilities.invokeLater(testMcdIO::new);
     }
 }
 
@@ -480,7 +480,7 @@ class ResourceHumaine extends JFrame {
     // Resource Humaine
     private JPanel p1, p2, p3, p4; // Panels
     private JLabel idL, spL, fL, tphL; // Labels
-    private JTextField id, sp, f, tph; // TextFields
+    private JTextField id, sp, fc, tph; // TextFields
     private JButton reset, add, read;
     private JTable table;
     private JScrollPane scrollPane;
@@ -506,7 +506,7 @@ class ResourceHumaine extends JFrame {
         id = new JTextField();
         model = new DefaultComboBoxModel<String>();
         sp = new JTextField();
-        f = new JTextField();
+        fc = new JTextField();
         tph = new JTextField();
         filterText = new JTextField();
 
@@ -535,7 +535,7 @@ class ResourceHumaine extends JFrame {
         p1.add(sp);
 
         p1.add(fL);
-        p1.add(f);
+        p1.add(fc);
 
         p1.add(tphL);
         p1.add(tph);
@@ -559,7 +559,7 @@ class ResourceHumaine extends JFrame {
             public void actionPerformed(ActionEvent e1) {
                 // Clear the text fields
                 id.setText("");
-                f.setText("");
+                fc.setText("");
                 sp.setText("");
                 tph.setText("");
             }
@@ -585,8 +585,8 @@ class ResourceHumaine extends JFrame {
                     String IDvalue = id.getText();
                     String spValue = sp.getText();
                     double tphValue = Double.parseDouble(tph.getText());
-                    String fValue = f.getText();
-
+                    String fValue = fc.getText();
+                    
                     while (spValue != null && fValue != null && tphValue >= 0.0 && IDvalue != null) {
                         data.writeUTF(IDvalue);
                         data.writeUTF(spValue);

@@ -43,7 +43,7 @@ public class testMcd extends JFrame {
     private JPanel p9, p10, p11, p12;
     private JLabel idL2, cL2, dL2, eL2;
     private JTextField id2, c2, d2, e2;
-    private JButton reset2, add2, addProcessus;
+    private JButton reset2, add2, read2, addProcessus;
     private JTable table2;
     private JScrollPane scrollPane2;
 
@@ -82,7 +82,7 @@ public class testMcd extends JFrame {
         filterButton = new JButton("Filter");
 
         // Processus JTable componets
-        String[] columnNames = { "Identité", "Resource Affectée", "Cout", "Durée", "État", "Total" };
+        String[] columnNames = { "Identité", "Resource Affectée", "Cout", "Durée", "État"};
         DefaultTableModel model2 = new DefaultTableModel(columnNames, 0);
         table = new JTable(model2);
         scrollPane = new JScrollPane(table);
@@ -340,9 +340,10 @@ public class testMcd extends JFrame {
         add2 = new JButton("Add");
         filterButton1 = new JButton("Filter");
         addProcessus = new JButton("Add Processus");
+        read2 = new JButton("Read data");
 
         // Table
-        String[] columnNames2 = { "Identité", "Cout", "Durée", "État", "Total" };
+        String[] columnNames2 = { "Identité", "Cout", "Durée", "État"};
         model4 = new DefaultTableModel(columnNames2, 0);
         table2 = new JTable(model4);
         scrollPane2 = new JScrollPane(table2);
@@ -366,7 +367,7 @@ public class testMcd extends JFrame {
         p10.add(reset2);
         p10.add(filterButton1);
         p10.add(addProcessus);
-
+        p10.add(read2);
         p11.add(scrollPane2);
         // Add panels to the main panel
         p12.add(p9, BorderLayout.NORTH);
@@ -378,6 +379,46 @@ public class testMcd extends JFrame {
         addProcessus.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 new Processus();
+            }
+        });
+
+        read2.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    FileReader reader = new FileReader("Projet.txt");
+                    BufferedReader br = new BufferedReader(reader);
+                    String line;
+                    while ((line = br.readLine()) != null) {
+                        String[] elt = line.split(",");
+                        model5.addRow(elt);
+                    }
+                } catch (IOException ioe) {
+                    JOptionPane.showMessageDialog(null, "Error");
+                }
+
+            }
+        });
+
+        add2.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String id3 = id2.getText();
+                String c3 = c2.getText();
+                String e3 = e2.getText();
+                String d3 = d2.getText();
+
+                if (id2 != null && c2 != null && e2 != null && d2 != null) {
+                    try {
+                        FileWriter w = new FileWriter("Tache.txt", true);
+                        BufferedWriter bw = new BufferedWriter(w);
+                        String data = id3 + ", "  + c3 + ", " + e3 + ", " + d3;
+                        bw.write(data);
+                        bw.newLine();
+                        bw.close();
+                        JOptionPane.showMessageDialog(null, "DataAdded");
+                    } catch (IOException ioe) {
+                        JOptionPane.showMessageDialog(null, "Error");
+                    }
+                }
             }
         });
 
