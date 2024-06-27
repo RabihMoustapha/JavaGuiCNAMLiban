@@ -390,7 +390,7 @@ public class testMcd extends JFrame {
                     String line;
                     while ((line = br.readLine()) != null) {
                         String[] elt = line.split(",");
-                        model5.addRow(elt);
+                        model4.addRow(elt);
                     }
                 } catch (IOException ioe) {
                     JOptionPane.showMessageDialog(null, "Error");
