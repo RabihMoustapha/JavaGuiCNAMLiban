@@ -1,1 +1,1 @@
-1, Resource Materielle, 2, 3, 5
+1, Resource Materielle, 2, 3, 50
