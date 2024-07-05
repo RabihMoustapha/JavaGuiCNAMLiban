@@ -185,6 +185,7 @@ public class testMcd extends JFrame {
         filterButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 String filter = filterText.getText();
+                sorter = new TableRowSorter<>(model2);
                 RowFilter<DefaultTableModel, Object> rf = null;
                 rf = RowFilter.regexFilter(filter);
                 sorter.setRowFilter(rf);
@@ -570,7 +571,7 @@ class ResourceHumaine extends JFrame {
         filterButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 String filter = filterText.getText();
-                sorter = new TableRowSorter<>(model);
+                sorter = new TableRowSorter<>(model2);
                 RowFilter<DefaultTableModel, Object> rf = null;
                 rf = RowFilter.regexFilter(filter);
                 sorter.setRowFilter(rf);
