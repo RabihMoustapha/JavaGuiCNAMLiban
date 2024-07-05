@@ -25,6 +25,12 @@ public class testMcd extends JFrame {
     private JComboBox<String> rA;
 
     // Projet
+    // Filter
+    private JLabel filterLabel2;
+    private TableRowSorter<DefaultTableModel> sorter2;
+    private JTextField filterText2;
+    private JButton filterButton2;
+
     private JPanel p5, p6, p7, p8; // Panels
     private JLabel idL1, raL1, cL1, dL1, eL1; // Labels
     private JTextField id1, c1, d1, e1; // TextFields
@@ -82,7 +88,7 @@ public class testMcd extends JFrame {
         filterButton = new JButton("Filter");
 
         // Processus JTable componets
-        String[] columnNames = { "Identité", "Resource Affectée", "Cout", "Durée", "État"};
+        String[] columnNames = { "Identité", "Resource Affectée", "Cout", "Durée", "État" };
         DefaultTableModel model2 = new DefaultTableModel(columnNames, 0);
         table = new JTable(model2);
         scrollPane = new JScrollPane(table);
@@ -212,6 +218,7 @@ public class testMcd extends JFrame {
         dL1 = new JLabel("Durée");
         cL1 = new JLabel("Cout");
         eL1 = new JLabel("État");
+        filterLabel2 = new JLabel("Filter");
 
         // Projet TextFields
         id1 = new JTextField();
@@ -224,12 +231,19 @@ public class testMcd extends JFrame {
         add1 = new JButton("Add");
         addTache = new JButton("Add tache");
         read1 = new JButton("Read data");
+        filterButton2 = new JButton("Filter");
 
         // JTable componets
         String[] columnNames1 = { "Identité", "Cout", "Durée", "État" };
         model4 = new DefaultTableModel(columnNames1, 0);
         table1 = new JTable(model4);
         scrollPane1 = new JScrollPane(table1);
+
+        // Filter componets
+        sorter2 = new TableRowSorter<>(model4);
+        table1.setRowSorter(sorter2);
+        filterText2 = new JTextField();
+        filterText2.setToolTipText("Filter");
 
         // Add componets to the panels
         p5.add(idL1);
@@ -244,11 +258,15 @@ public class testMcd extends JFrame {
         p5.add(dL1);
         p5.add(d1);
 
+        p5.add(filterLabel2);
+        p5.add(filterText2);
+
         // p6
         p6.add(add1);
         p6.add(reset1);
         p6.add(addTache);
         p6.add(read1);
+        p6.add(filterButton2);
 
         // p7
         p7.add(scrollPane1);
@@ -303,7 +321,7 @@ public class testMcd extends JFrame {
                     try {
                         FileWriter w = new FileWriter("Projet.txt", true);
                         BufferedWriter bw = new BufferedWriter(w);
-                        String data = id2 + ", "  + c2 + ", " + e2 + ", " + d2;
+                        String data = id2 + ", " + c2 + ", " + e2 + ", " + d2;
                         bw.write(data);
                         bw.newLine();
                         bw.close();
@@ -312,6 +330,17 @@ public class testMcd extends JFrame {
                         JOptionPane.showMessageDialog(null, "Error");
                     }
                 }
+            }
+        });
+
+        filterButton2.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String filter = filterText2.getText();
+                sorter2 = new TableRowSorter<>(model4);
+                RowFilter<DefaultTableModel, Object> rf = null;
+                rf = RowFilter.regexFilter(filter);
+                sorter2.setRowFilter(rf);
+                table1.setRowSorter(sorter2);
             }
         });
 
@@ -343,7 +372,7 @@ public class testMcd extends JFrame {
         read2 = new JButton("Read data");
 
         // Table
-        String[] columnNames2 = { "Identité", "Cout", "Durée", "État"};
+        String[] columnNames2 = { "Identité", "Cout", "Durée", "État" };
         model4 = new DefaultTableModel(columnNames2, 0);
         table2 = new JTable(model4);
         scrollPane2 = new JScrollPane(table2);
@@ -385,7 +414,7 @@ public class testMcd extends JFrame {
         read2.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 try {
-                    FileReader reader = new FileReader("Projet.txt");
+                    FileReader reader = new FileReader("Tache.txt");
                     BufferedReader br = new BufferedReader(reader);
                     String line;
                     while ((line = br.readLine()) != null) {
@@ -410,7 +439,7 @@ public class testMcd extends JFrame {
                     try {
                         FileWriter w = new FileWriter("Tache.txt", true);
                         BufferedWriter bw = new BufferedWriter(w);
-                        String data = id3 + ", "  + c3 + ", " + e3 + ", " + d3;
+                        String data = id3 + ", " + c3 + ", " + e3 + ", " + d3;
                         bw.write(data);
                         bw.newLine();
                         bw.close();
@@ -419,6 +448,15 @@ public class testMcd extends JFrame {
                         JOptionPane.showMessageDialog(null, "Error");
                     }
                 }
+            }
+        });
+
+        reset2.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                id2.setText("");
+                d2.setText("");
+                c2.setText("");
+                e2.setText("");
             }
         });
 
@@ -532,7 +570,7 @@ class ResourceHumaine extends JFrame {
         filterButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 String filter = filterText.getText();
-                // sorter = new TableRowSorter<>(model);
+                sorter = new TableRowSorter<>(model);
                 RowFilter<DefaultTableModel, Object> rf = null;
                 rf = RowFilter.regexFilter(filter);
                 sorter.setRowFilter(rf);

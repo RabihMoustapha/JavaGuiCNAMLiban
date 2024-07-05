@@ -25,6 +25,11 @@ public class testMcdIO extends JFrame {
     private JComboBox<String> rA;
 
     // Projet
+    // Filter
+    private JLabel filterLabel2;
+    private TableRowSorter<DefaultTableModel> sorter2;
+    private JTextField filterText2;
+    private JButton filterButton2;
     private JPanel p5, p6, p7, p8; // Panels
     private JLabel idL1, raL1, cL1, dL1, eL1; // Labels
     private JTextField id1, c1, d1, e1; // TextFields
@@ -223,24 +228,32 @@ public class testMcdIO extends JFrame {
         dL1 = new JLabel("Durée");
         cL1 = new JLabel("Cout");
         eL1 = new JLabel("État");
+        filterLabel2 = new JLabel("Filter");
 
         // Projet TextFields
         id1 = new JTextField();
         c1 = new JTextField();
         d1 = new JTextField();
         e1 = new JTextField();
+        filterText2 = new JTextField();
 
         // Buttons
         reset1 = new JButton("Reset");
         add1 = new JButton("Add");
         addTache = new JButton("Add tache");
         read1 = new JButton("Read data");
+        filterButton2 = new JButton("Filter");
 
         // JTable componets
         String[] columnNames1 = { "Identité", "Cout", "Durée", "État" };
         model4 = new DefaultTableModel(columnNames1, 0);
         table1 = new JTable(model4);
         scrollPane1 = new JScrollPane(table1);
+
+        //Filter
+        sorter2 = new TableRowSorter<>(model4);
+        table1.setRowSorter(sorter2);
+        filterText2.setToolTipText("Filter");
 
         // Add componets to the panels
         p5.add(idL1);
@@ -255,11 +268,15 @@ public class testMcdIO extends JFrame {
         p5.add(dL1);
         p5.add(d1);
 
+        p5.add(filterLabel2);
+        p5.add(filterText2);
+
         // p6
         p6.add(add1);
         p6.add(reset1);
         p6.add(addTache);
         p6.add(read1);
+        p6.add(filterButton2);
 
         // p7
         p7.add(scrollPane1);
@@ -321,21 +338,21 @@ public class testMcdIO extends JFrame {
                     f = new FileInputStream("Projet.dat");
                     data = new DataInputStream(f);
                     while (data.available() > 0) {
-                        model4.addRow(
-                                new Object[] { data.readUTF(), data.readDouble(), data.readInt(), data.readUTF() });
-                        data.close();
+                        model4.addRow(new Object[] { data.readUTF(), data.readDouble(), data.readInt(), data.readUTF() });
                     }
                 } catch (IOException ioe) {
                     JOptionPane.showMessageDialog(null, "Error");
-                } finally {
-                    try {
-                        if (data != null) {
-                            data.close();
-                        }
-                    } catch (IOException e1) {
-                        e1.printStackTrace();
-                    }
                 }
+            }
+        });
+
+        filterButton2.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String filter = filterText2.getText();
+                RowFilter<DefaultTableModel, Object> rf = null;
+                rf = RowFilter.regexFilter(filter);
+                sorter2.setRowFilter(rf);
+                table1.setRowSorter(sorter2);
             }
         });
 
@@ -586,7 +603,7 @@ class ResourceHumaine extends JFrame {
                     String spValue = sp.getText();
                     double tphValue = Double.parseDouble(tph.getText());
                     String fValue = fc.getText();
-                    
+
                     while (spValue != null && fValue != null && tphValue >= 0.0 && IDvalue != null) {
                         data.writeUTF(IDvalue);
                         data.writeUTF(spValue);

@@ -1,3 +1,0 @@
-a1, hr, 10, Management de projet
-a2, HR, 10, Maanagae
-c10010, Cours, 900, étudiant
