@@ -52,6 +52,7 @@ public class testMcd extends JFrame {
     private JButton reset2, add2, read2, addProcessus;
     private JTable table2;
     private JScrollPane scrollPane2;
+    private DefaultTableModel model5;
 
     public testMcd() {
         // Processus
@@ -374,8 +375,8 @@ public class testMcd extends JFrame {
 
         // Table
         String[] columnNames2 = { "Identité", "Cout", "Durée", "État" };
-        model4 = new DefaultTableModel(columnNames2, 0);
-        table2 = new JTable(model4);
+        model5 = new DefaultTableModel(columnNames2, 0);
+        table2 = new JTable(model5);
         scrollPane2 = new JScrollPane(table2);
 
         // Add componets
@@ -420,7 +421,7 @@ public class testMcd extends JFrame {
                     String line;
                     while ((line = br.readLine()) != null) {
                         String[] elt = line.split(",");
-                        model4.addRow(elt);
+                        model5.addRow(elt);
                     }
                 } catch (IOException ioe) {
                     JOptionPane.showMessageDialog(null, "Error");
