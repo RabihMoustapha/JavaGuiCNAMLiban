@@ -87,7 +87,7 @@ public class testMcdIO extends JFrame {
         filterButton = new JButton("Filter");
 
         // Processus JTable componets
-        String[] columnNames = { "Identité", "Cout", "Durée", "État" };
+        String[] columnNames = { "Identité", "Resource Affectée", "Cout", "Durée", "État" };
         DefaultTableModel model2 = new DefaultTableModel(columnNames, 0);
         table = new JTable(model2);
         scrollPane = new JScrollPane(table);
