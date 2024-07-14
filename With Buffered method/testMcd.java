@@ -664,7 +664,7 @@ class ResourceMaterielle extends JFrame {
         filterButton = new JButton("Filter");
 
         // Resource Humaine JTable componets
-        String[] columnNames = { "Identité", "Spécialité", "Fonction", "TPH" };
+        String[] columnNames = { "Identité", "Cout Par Unité" };
         DefaultTableModel model2 = new DefaultTableModel(columnNames, 0);
         table = new JTable(model2);
         scrollPane = new JScrollPane(table);
