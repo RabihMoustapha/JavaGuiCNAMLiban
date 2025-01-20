@@ -1,2 +1,3 @@
-# Java-Gui
-A java gui project for university
+# JavaGui(NFA035)
+# 2023 / 2024
+# University
