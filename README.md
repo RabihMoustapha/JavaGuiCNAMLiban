@@ -4,70 +4,105 @@
 Examen : Projet 2023 - 2024
 Thème du projet : Gestion de fabrication de prototypes.
 
-# I. Introduction
+I. Introduction
 Après trois cours Java au sein du Cnam, la conception objet devient un élément primordial pour l’étudiant! L’élaboration d’un modèle objet avec ses données et ses traitements est un must.
 A travers le présent devoir, L’étudiant doit valider les connaissances acquises dans les chapitres :
-- La programmation objet
-- La programmation évènementielle et IHM.
-- La généricité et les collections
-- Les entrées/sorties
-- Les patrons MVC et Observer
-
-# Note importante :
+-
+La programmation objet
+-
+La programmation évènementielle et IHM.
+-
+La généricité et les collections
+-
+Les entrées/sorties
+-
+Les patrons MVC et Observer
+Note importante :
 Ce texte donne une idée brève sur le contenu (données et opérations) de l’application. Il présente seulement les technicités générales du cas traité. C’est à l’étudiant de faire davantage de développement et d’inclure des informations et des opérations qu’il voit nécessaires pour l’application.
 Une bonne modélisation de données et traitements, une implémentation flexible, ainsi que des interfaces ergonomiques seront bien récompensées.
-
-# II. Présentation du projet
+II.
+Présentation du projet
 L’entreprise OMEGA s’occupe de la fabrication, de A à Z, de prototypes (premiers modèles) pour les compagnies d’électroménagers à travers des contrats qui imposent à OMEGA l’implémentation d’un projet afin d’obtenir le prototype et son coût.
 Un projet de fabrication d’un prototype comprend toutes ou une partie des tâches suivantes :
-- Conception
-- Préparation des matières premières
-- Fabrication d’éléments
-- Assemblage et finissage
-- Test
+-
+Conception
+-
+Préparation des matières premières
+-
+Fabrication d’éléments
+-
+Assemblage et finissage
+-
+Test
 Une tâche comprend un ensemble de processus. Chaque processus possède un coût qui mène à pouvoir calculer le cout d’une tâche et, par conséquent, du projet entier. Pour simplifier, nous allons considérer que ce coût inclut :
-- Le coût des matières premières utilisées.
-- Le coût des ressources humaines (main d’oeuvre) impliquées dans la tâche.
-- Les coûts divers comme les logistiques, le carburant, l’électricité, etc.
+-
+Le coût des matières premières utilisées.
+-
+Le coût des ressources humaines (main d’oeuvre) impliquées dans la tâche.
+-
+Les coûts divers comme les logistiques, le carburant, l’électricité, etc.
 L’objectif de cet exercice est de faire apparaitre le progrès d’un projet de fabrication à travers une simulation contrôlée des étapes de fabrication, ainsi que de calculer le coût du produit final (le prototype).
 Pour l’entreprise OMEGA, la fabrication d’un prototype représente un projet indépendant. Chaque projet inclut toutes ou une partie des tâches susmentionnées.
 En ce qui concerne le calcul des coûts des trois catégories susmentionnées, il est effectué comme suit :
-- Le coût des matières premières et les coûts divers sont calculés par le nombre d’unités de la matière utilisée et le coût de chaque unité.
-- Le coût de main d’oeuvre est calculé pour chaque employé impliqué dans le processus, i.e. chaque employé travaille un nombre déterminé d’heures dans chaque processus et touche un montant pour chaque heure travaillée. (Un employé peut être affecté à plusieurs processus en plusieurs tâches en plusieurs projets). Le tarif de l’heure travaillée dépend de la fonction de l’employé (Job).
- 
-# Les données
-- L’application doit permettre de gérer les données principales des sujets suivants ainsi que d’autres données que vous proposez selon le besoin ou la créativité:
-- Les projets : identité, tâches, état d’implémentation, coût progressif pendant les étapes d’exécution, durée.
-- Les tâches : identité, processus, coût, état, durée.
-- Les processus : identité, ressources affectées, coût, état, durée.
-- Les ressources : Humaines et matérielles.
-- Les ressources humaines : Des données sur les employées : identité, spécialité, fonction, tarif par heure.
-- Les ressources matérielles : identité, coût par unité.
-- 
-# Les Traitements
-L’application doit permettre de:
-- Saisir les données nécessaires à l’application
-- Valider les données saisies afin qu’elles conforment à des figures logiques du cas traité.
-- Construire un projet :
-1)Créer le projet
-2)Affecter des taches au projet
-3)Affecter des processus à chaque tâche
-4) Affecter des ressources à chaque processus d’une manière convenable.
-5) Lancer une simulation d’une exécution progressive d’un projet ➔ tâche ➔ processus et visualiser le progrès des états et des coûts.
-6) Mettre en oeuvre un système de filtrage projet ➔ tâche ➔ processus ➔ ressource pour pouvoir faire des statistiques sur les projets accomplis.
-7) Sauvegarder et restituer toutes les données de l’application dans des fichiers sur disques pour toute utilisation ultérieure.
+-
+Le coût des matières premières et les coûts divers sont calculés par le nombre d’unités de la matière utilisée et le coût de chaque unité.
+-
+Le coût de main d’oeuvre est calculé pour chaque employé impliqué dans le processus, i.e. chaque employé travaille un nombre déterminé d’heures dans chaque processus et touche un montant pour chaque heure travaillée. (Un employé peut être affecté à plusieurs processus en plusieurs tâches en plusieurs projets). Le tarif de l’heure travaillée dépend de la fonction de l’employé (Job).
 
-# Le travail demandé :
-1) En considérant la description du projet ci-haut, nous demandons de :
-- Etablir les modèles de données et de traitements de l’application.
-- Implémenter les interfaces graphiques nécessaires pour l’interface homme-machine. A titre de conseil, il est préférable d’avoir trois interfaces graphiques qui communiquent entre elles:
-1)Une interface de saisie de données (saisie, affectation, …)
-2)Une interface pour la simulation d’exécution d’un projet (les tâches, les processus) avec une partie qui reflète les changements progressifs (MVC)
-3)Une interface pour le filtrage et statistiques sur tous les détails et les entités du projet.
-4)Implémenter les traitements des différentes opérations.
-5)Elaborer des sorties informatives et compréhensives sur les opérations effectuées avec possibilité de recherche minutieuse à plusieurs niveaux de filtrage.
-  
-# III. Affectation du projet aux auditeurs
+Les données
+L’application doit permettre de gérer les données principales des sujets suivants ainsi que d’autres données que vous proposez selon le besoin ou la créativité:
+o
+Les projets : identité, tâches, état d’implémentation, coût progressif pendant les étapes d’exécution, durée.
+o
+Les tâches : identité, processus, coût, état, durée.
+o
+Les processus : identité, ressources affectées, coût, état, durée.
+o
+Les ressources : Humaines et matérielles.
+-
+Les ressources humaines : Des données sur les employées : identité, spécialité, fonction, tarif par heure.
+-
+Les ressources matérielles : identité, coût par unité.
+Les Traitements
+L’application doit permettre de:
+o
+Saisir les données nécessaires à l’application
+o
+Valider les données saisies afin qu’elles conforment à des figures logiques du cas traité.
+o
+Construire un projet :
+-
+Créer le projet
+-
+Affecter des taches au projet
+-
+Affecter des processus à chaque tâche
+-
+Affecter des ressources à chaque processus d’une manière convenable.
+o
+Lancer une simulation d’une exécution progressive d’un projet ➔ tâche ➔ processus et visualiser le progrès des états et des coûts.
+o
+Mettre en oeuvre un système de filtrage projet ➔ tâche ➔ processus ➔ ressource pour pouvoir faire des statistiques sur les projets accomplis.
+o
+Sauvegarder et restituer toutes les données de l’application dans des fichiers sur disques pour toute utilisation ultérieure.
+Le travail demandé :
+En considérant la description du projet ci-haut, nous demandons de :
+▪
+Etablir les modèles de données et de traitements de l’application.
+▪
+Implémenter les interfaces graphiques nécessaires pour l’interface homme-machine. A titre de conseil, il est préférable d’avoir trois interfaces graphiques qui communiquent entre elles:
+-
+Une interface de saisie de données (saisie, affectation, …)
+-
+Une interface pour la simulation d’exécution d’un projet (les tâches, les processus) avec une partie qui reflète les changements progressifs (MVC)
+-
+Une interface pour le filtrage et statistiques sur tous les détails et les entités du projet.
+▪
+Implémenter les traitements des différentes opérations.
+▪
+Elaborer des sorties informatives et compréhensives sur les opérations effectuées avec possibilité de recherche minutieuse à plusieurs niveaux de filtrage.
+III.
+Affectation du projet aux auditeurs
 o
 Le projet sera affecté aux auditeurs en groupes de deux personnes (appelons le « binôme ») de votre choix pour vous faciliter le travail en équipe. Un email vous a été envoyé à ce propos.
 o
